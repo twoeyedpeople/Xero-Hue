@@ -16,12 +16,13 @@ export default function Layout({ children, patientName = 'Guest Attendee' }: Lay
       {/* Header Section */}
       <header className="flex justify-between items-end border-b border-neutral-300 pb-6">
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 bg-xero-blue rounded-full flex items-center justify-center">
-              <span className="text-white font-black text-xl">x</span>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-11 h-11 rounded-full bg-xero-blue flex items-center justify-center shadow-[0_10px_25px_-18px_rgba(19,181,234,0.8)]">
+              <span className="text-white font-semibold text-[1.65rem] leading-none -mt-0.5">x</span>
             </div>
             <h1 className="text-3xl font-black tracking-tight flex items-center gap-1">
-              Xero <span className="text-xero-blue italic font-medium">Hue & You</span>
+              <span className="text-xero-navy">Xero</span>
+              <span className="text-xero-blue">Hue & You</span>
             </h1>
           </div>
           <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-50">
