@@ -95,7 +95,7 @@ export default function App() {
           {state === 'consent' && <Consent onAccept={handleConsent} onDecline={handleDecline} />}
           {state === 'camera' && <CameraComponent onCapture={handleCapture} onCancel={handleReset} />}
           {state === 'style-selection' && <StyleSelector onSelect={handleStyleSelect} selectedStyle={selectedStyle} />}
-          {state === 'analyzing' && <AnalysisOverlay />}
+          {state === 'analyzing' && <AnalysisOverlay userImage={userImage} />}
           {state === 'results' && analysis && selectedStyle && (
             <ResultsView 
               {...analysis} 
@@ -116,4 +116,3 @@ export default function App() {
     </Layout>
   );
 }
-

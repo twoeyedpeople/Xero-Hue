@@ -17,7 +17,11 @@ const MESSAGES = [
   "FINALIZING COLOR PALETTE..."
 ];
 
-export default function AnalysisOverlay() {
+interface AnalysisOverlayProps {
+  userImage?: string;
+}
+
+export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
   const [msgIndex, setMsgIndex] = useState(0);
 
   useEffect(() => {
@@ -42,12 +46,24 @@ export default function AnalysisOverlay() {
                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                className="absolute top-0 left-0 w-full h-[3px] bg-xero-blue shadow-[0_0_25px_rgba(19,181,234,0.8)] z-20"
             />
-            <div className="w-48 h-48 rounded-full border-4 border-white/10 mb-4 flex items-center justify-center overflow-hidden">
-                <motion.div 
-                  className="w-full h-full bg-xero-blue/20"
-                  animate={{ opacity: [0.1, 0.4, 0.1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
+            <div className="w-48 h-48 rounded-full border-4 border-white/10 mb-4 flex items-center justify-center overflow-hidden relative bg-xero-blue/10">
+                {userImage ? (
+                  <motion.img
+                    src={userImage}
+                    alt="Captured user"
+                    className="w-full h-full object-cover"
+                    animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.03, 1] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                ) : (
+                  <motion.div 
+                    className="w-full h-full bg-xero-blue/20"
+                    animate={{ opacity: [0.1, 0.4, 0.1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-xero-navy/30" />
+                <div className="absolute inset-0 border border-white/10 rounded-full" />
             </div>
             <span className="text-[10px] font-mono uppercase font-bold tracking-[0.2em] text-white/40">Status: EXTRUDING DATA</span>
           </div>

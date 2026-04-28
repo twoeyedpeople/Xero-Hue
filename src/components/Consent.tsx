@@ -26,54 +26,18 @@ export default function Consent({ onAccept, onDecline }: ConsentProps) {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8"
+        className="w-full max-w-4xl"
       >
-        <section className="lg:col-span-5 bg-xero-navy rounded-[2rem] p-8 md:p-10 text-white shadow-2xl flex flex-col justify-between min-h-[540px]">
-          <div>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[9px] font-bold uppercase tracking-[0.25em] text-xero-blue mb-8">
-              Consent Gateway
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] mb-5">
-              Privacy
-              <br />
-              Protocol
-            </h2>
-
-            <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-md mb-10">
-              Before we activate the chromatic scan, we need your approval to process one live image through the Hue & You analysis engine.
-            </p>
-
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 mb-2">Processing Mode</div>
-                <div className="text-lg font-black uppercase tracking-tight">Real-Time AI Analysis</div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 mb-2">Data Retention</div>
-                <div className="text-lg font-black uppercase tracking-tight">Session Use Only</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-xero-blue/30 bg-white/5 p-6">
-            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-xero-blue mb-3">System Notice</div>
-            <p className="text-sm text-white/75 leading-relaxed">
-              This experience is designed for event demonstration purposes and uses camera access only after you explicitly opt in.
-            </p>
-          </div>
-        </section>
-
-        <section className="lg:col-span-7 bg-white rounded-[2rem] p-8 md:p-10 border border-neutral-200 shadow-xl min-h-[540px] flex flex-col">
+        <section className="bg-white rounded-[2rem] p-8 md:p-10 border border-neutral-200 shadow-xl flex flex-col">
           <div className="mb-8">
-            <h3 className="text-[10px] font-mono uppercase tracking-[0.3em] text-xero-blue font-bold mb-4">
-              Step 01: Consent Capture
-            </h3>
-            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-xero-navy leading-[0.9] mb-5">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-xero-blue/8 border border-xero-blue/15 text-[9px] font-bold uppercase tracking-[0.25em] text-xero-blue mb-5">
+              Consent Required
+            </div>
+            <h2 className="text-4xl md:text-[2.7rem] font-black uppercase tracking-tighter text-xero-navy leading-[0.95] mb-4">
               Privacy & Consent
             </h2>
             <p className="text-base text-neutral-500 leading-relaxed max-w-2xl">
-              By proceeding, you agree to the following terms regarding the Hue & You AI activation.
+              Before we begin, please review and confirm the agreements below.
             </p>
           </div>
 
