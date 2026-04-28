@@ -6,8 +6,21 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Season, Style } from "../types";
 import { PALETTES } from "../constants";
+import { db, ensureAuth, handleFirestoreError, OperationType } from "./firebase";
+import { collection, addDoc, serverTimestamp, doc, setDoc } from "firebase/firestore";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Simple guest ID helper
+const GUEST_ID_KEY = 'hue_you_guest_id';
+export function getGuestId() {
+  let id = localStorage.getItem(GUEST_ID_KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(GUEST_ID_KEY, id);
+  }
+  return id;
+}
 
 export async function analyzeUserPalette(image64: string): Promise<{
   season: Season;
@@ -18,6 +31,7 @@ export async function analyzeUserPalette(image64: string): Promise<{
   reasoning: string;
 }> {
   const model = "gemini-3-flash-preview";
+  const guestId = getGuestId();
   
   const response = await ai.models.generateContent({
     model,
@@ -65,8 +79,36 @@ export async function analyzeUserPalette(image64: string): Promise<{
 
   try {
     const result = JSON.parse(response.text);
+    
+    // Persist to Firestore
+    await ensureAuth();
+    try {
+      const analysisData = {
+        userId: guestId,
+        season: result.season,
+        hue: result.hue,
+        value: result.value,
+        chroma: result.chroma,
+        reasoning: result.reasoning,
+        createdAt: serverTimestamp()
+      };
+      await addDoc(collection(db, 'analyses'), analysisData);
+      
+      // Update user doc for consistency
+      await setDoc(doc(db, 'users', guestId), {
+        guestId,
+        lastSeason: result.season,
+        lastUpdatedAt: serverTimestamp(),
+        createdAt: serverTimestamp() // setDoc with merge might be better but create is fine if we check
+      }, { merge: true });
+      
+    } catch (dbErr) {
+      handleFirestoreError(dbErr, OperationType.WRITE, 'analyses');
+    }
+
     return result;
   } catch (e) {
+    if (e instanceof Error && e.message.includes('{"error"')) throw e; // Re-throw firestore error
     console.error("Failed to parse Gemini response", e);
     throw new Error("Analysis failed. Please try again.");
   }

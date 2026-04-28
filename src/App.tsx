@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppState, Season, Style } from './types';
 import Layout from './components/Layout';
 import Welcome from './components/Welcome';
@@ -17,7 +17,7 @@ import CameraComponent from './components/CameraComponent';
 import StyleSelector from './components/StyleSelector';
 import AnalysisOverlay from './components/AnalysisOverlay';
 import ResultsView from './components/ResultsView';
-import { analyzeUserPalette, generateStylizedImage } from './services/geminiService';
+import { analyzeUserPalette, generateStylizedImage, getGuestId } from './services/geminiService';
 import { AnimatePresence, motion } from 'motion/react';
 
 export default function App() {
@@ -32,6 +32,11 @@ export default function App() {
   } | null>(null);
   const [synthesizedImage, setSynthesizedImage] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  const [guestId, setGuestId] = useState<string>('');
+
+  useEffect(() => {
+    setGuestId(getGuestId());
+  }, []);
 
   const handleStart = () => setState('consent');
   const handleConsent = () => setState('camera');
@@ -76,7 +81,7 @@ export default function App() {
   };
 
   return (
-    <Layout>
+    <Layout patientName={`Partner #${guestId.slice(0, 4).toUpperCase()}`}>
       <AnimatePresence mode="wait">
         <motion.div
           key={state}

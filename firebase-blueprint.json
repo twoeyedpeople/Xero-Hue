@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "Analysis": {
+      "title": "Analysis",
+      "description": "A color analysis for a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Anonymous user ID from localStorage"
+        },
+        "season": {
+          "type": "string",
+          "description": "The determined color season"
+        },
+        "hue": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "chroma": {
+          "type": "string"
+        },
+        "reasoning": {
+          "type": "string"
+        },
+        "imageHash": {
+          "type": "string",
+          "description": "Optional hash of the image for deduplication"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "season", "hue", "value", "chroma", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "An anonymous user profile.",
+      "type": "object",
+      "properties": {
+        "guestId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastSeason": {
+          "type": "string",
+          "description": "The last determined season to ensure consistency"
+        }
+      },
+      "required": ["guestId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "analyses/{analysisId}": {
+      "schema": "Analysis",
+      "description": "Collection of color analysis results."
+    },
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Anonymous guest profiles."
+    }
+  }
+}

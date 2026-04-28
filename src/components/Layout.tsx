@@ -25,11 +25,11 @@ export default function Layout({ children, patientName = 'Guest Attendee' }: Lay
             </h1>
           </div>
           <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-50">
-            Professional Color Analysis Engine // Brisbane 2026
+            Professional Color Analysis Engine // Brisbane 2025
           </p>
         </div>
         <div className="text-right hidden sm:block">
-          <p className="text-[10px] font-mono uppercase opacity-40 mb-1">Session ID: BNE-26-ALPHA</p>
+          <p className="text-[10px] font-mono uppercase opacity-40 mb-1">Guest Identification</p>
           <div className="px-3 py-1 bg-white border border-neutral-200 rounded-full inline-block">
              <p className="text-xs font-bold text-xero-blue uppercase tracking-wider">{patientName}</p>
           </div>
@@ -51,7 +51,7 @@ export default function Layout({ children, patientName = 'Guest Attendee' }: Lay
           <div className="w-2 h-2 rounded-full bg-green-600"></div>
           <div className="w-2 h-2 rounded-full bg-blue-600"></div>
         </div>
-        <span>&copy; 2026 Xerocon Brisbane</span>
+        <span>&copy; 2025 Xerocon Brisbane</span>
       </footer>
     </div>
   );

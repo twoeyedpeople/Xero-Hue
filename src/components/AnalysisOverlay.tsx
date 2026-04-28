@@ -12,7 +12,7 @@ const MESSAGES = [
   "ANALYZING SKIN CHROMA...",
   "MAPPING EYE REFLECTANCE...",
   "CROPPING CHROMATIC DATA...",
-  "CROSS-REFERENCING 12-SEASON DATABASE...",
+  "CROSS-REFERENCING DATABASE...",
   "SYNTHESIZING WARDROBE DATA...",
   "FINALIZING COLOR PALETTE..."
 ];
@@ -88,7 +88,7 @@ export default function AnalysisOverlay() {
               </div>
 
               <div className="grid grid-cols-2 gap-6">
-                 <div className="bg-[#F4F7F9] rounded-2xl p-6 h-32 flex flex-col justify-between border border-neutral-100">
+                 <div className="bg-white rounded-2xl p-6 h-32 flex flex-col justify-between border border-neutral-100">
                     <span className="text-[9px] font-mono uppercase opacity-40">Gemini Core</span>
                     <motion.span 
                       animate={{ opacity: [0.4, 1, 0.4] }}
