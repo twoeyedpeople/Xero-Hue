@@ -170,109 +170,93 @@ export default function ResultsView({
   };
 
   return (
-    <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 overflow-y-auto pb-10 pt-4 items-start">
-      <section className="md:col-span-5 flex flex-col gap-5 md:gap-6">
-        <div className="bg-white rounded-[2rem] relative aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-100 group">
-          <div className="absolute bottom-6 left-6 z-20 bg-xero-navy/85 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
-            Editorial Look // {style}
+    <div className="flex-1 flex flex-col gap-5 md:gap-6 overflow-y-auto pb-10 pt-4">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-5 md:gap-6 items-start">
+        <section className="flex flex-col gap-5 md:gap-6">
+          <div className="bg-white rounded-[2rem] relative aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-100 group">
+            <div className="absolute bottom-6 left-6 z-20 bg-xero-navy/85 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
+              Editorial Look // {style}
+            </div>
+            {synthesizedImage ? (
+              <motion.img
+                initial={{ scale: 1.06, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.8 }}
+                src={synthesizedImage}
+                alt="Synthesized wardrobe recommendation"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-xero-blue border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
           </div>
-          {synthesizedImage ? (
-            <motion.img
-              initial={{ scale: 1.06, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              src={synthesizedImage}
-              alt="Synthesized wardrobe recommendation"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-neutral-100 flex items-center justify-center">
-              <div className="w-12 h-12 border-4 border-xero-blue border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
-        </div>
 
-        <div className="bg-xero-navy text-white rounded-3xl p-6 shadow-xl">
-          <h4 className="text-[10px] font-mono uppercase mb-6 text-xero-blue font-black tracking-widest">Digital Takeaway</h4>
-          <div className="flex items-center gap-6">
-            <div className="p-3 bg-white rounded-2xl shadow-inner shrink-0">
-              <QRCodeCanvas value={shareUrl} size={108} fgColor="#002B49" />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs font-medium text-neutral-300 leading-relaxed mb-6">
-                Scan to open a mobile results page with your season profile, palette matrix and a downloadable PDF-style takeaway.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleOpenTakeaway}
-                  className="flex-1 flex items-center justify-center gap-2 bg-xero-blue text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all active:scale-95"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Open Link
-                </button>
-                <button
-                  onClick={handleCopyLink}
-                  className="p-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all"
-                  aria-label="Copy takeaway link"
-                >
-                  <Link2 className="w-4 h-4" />
-                </button>
+          <div className="bg-xero-navy text-white rounded-3xl p-6 shadow-xl">
+            <h4 className="text-[10px] font-mono uppercase mb-6 text-xero-blue font-black tracking-widest">Digital Takeaway</h4>
+            <div className="flex items-center gap-6">
+              <div className="p-3 bg-white rounded-2xl shadow-inner shrink-0">
+                <QRCodeCanvas value={shareUrl} size={108} fgColor="#002B49" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-medium text-neutral-300 leading-relaxed mb-6">
+                  Scan to open a mobile results page with your season profile, palette matrix and a downloadable PDF-style takeaway.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleOpenTakeaway}
+                    className="flex-1 flex items-center justify-center gap-2 bg-xero-blue text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all active:scale-95"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Open Link
+                  </button>
+                  <button
+                    onClick={handleCopyLink}
+                    className="p-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all"
+                    aria-label="Copy takeaway link"
+                  >
+                    <Link2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="md:col-span-7 flex flex-col gap-5 md:gap-6">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-          <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl xl:col-span-8">
-            <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Seasonal Result</h3>
-            <h2 className="text-4xl md:text-5xl xl:text-[3.35rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">
-              {palette.title}
-            </h2>
-            <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
-              {summary}
-            </p>
-          </div>
-
-          <div className="bg-xero-blue text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl xl:col-span-4 min-h-[148px]">
-            <div className="flex justify-between items-start gap-4">
-              <h3 className="text-[10px] font-mono uppercase text-white/70 font-bold tracking-[0.22em]">Analysis Precision</h3>
-              <span className="text-xl md:text-2xl font-black">{formattedConfidence}</span>
-            </div>
-            <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden mt-3">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: formattedConfidence }}
-                transition={{ duration: 0.9, ease: 'easeOut' }}
-                className="bg-white h-full shadow-[0_0_15px_white]"
-              />
-            </div>
-            <p className="text-xs md:text-sm leading-5 md:leading-6 text-white/80 mt-3 max-w-[24ch]">
-              Confidence is now tied to image quality, axis clarity and decision-table fit.
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-3xl p-6 md:p-7 border border-neutral-100 shadow-xl">
-          <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr] xl:items-start">
-            <div>
-              <h3 className="text-[10px] font-mono uppercase mb-3 text-xero-blue font-black tracking-widest">Model Readout</h3>
-              <p className="text-base md:text-lg leading-8 text-xero-navy font-medium">{reasoning}</p>
+        <section className="flex flex-col gap-5 md:gap-6">
+          <div className="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_minmax(300px,0.48fr)] gap-5 items-start">
+            <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl">
+              <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Seasonal Result</h3>
+              <h2 className="text-4xl md:text-5xl xl:text-[3.2rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">
+                {palette.title}
+              </h2>
+              <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
+                {summary}
+              </p>
             </div>
 
-            <div className="grid gap-3">
-              <div className="rounded-2xl bg-[#F8FBFD] border border-neutral-200 p-4">
-                <h4 className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-3">Observed Evidence</h4>
-                <div className="space-y-3 text-sm leading-6 text-neutral-600">
-                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Skin</span> {evidence.skin}</p>
-                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Hair</span> {evidence.hair}</p>
-                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Eyes</span> {evidence.eyes}</p>
+            <div className="grid gap-5">
+              <div className="bg-xero-blue text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl min-h-[148px]">
+                <div className="flex justify-between items-start gap-4">
+                  <h3 className="text-[10px] font-mono uppercase text-white/70 font-bold tracking-[0.22em]">Analysis Precision</h3>
+                  <span className="text-xl md:text-2xl font-black">{formattedConfidence}</span>
                 </div>
+                <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden mt-3">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: formattedConfidence }}
+                    transition={{ duration: 0.9, ease: 'easeOut' }}
+                    className="bg-white h-full shadow-[0_0_15px_white]"
+                  />
+                </div>
+                <p className="text-xs md:text-sm leading-5 md:leading-6 text-white/80 mt-3 max-w-[28ch]">
+                  Confidence is now tied to image quality, axis clarity and decision-table fit.
+                </p>
               </div>
 
               {hasQualityFlags && (
-                <div className="rounded-2xl bg-[#FFF7EC] border border-[#F2D3A1] p-4">
+                <div className="rounded-3xl bg-[#FFF7EC] border border-[#F2D3A1] p-5 shadow-xl">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-4 h-4 text-[#BE7A00] mt-0.5 shrink-0" />
                     <div>
@@ -284,9 +268,29 @@ export default function ResultsView({
               )}
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="bg-white rounded-3xl p-6 md:p-7 border border-neutral-100 shadow-xl">
+            <div className="grid gap-5 xl:grid-cols-[1.12fr_0.88fr] xl:items-start">
+              <div>
+                <h3 className="text-[10px] font-mono uppercase mb-3 text-xero-blue font-black tracking-widest">Model Readout</h3>
+                <p className="text-base md:text-lg leading-8 text-xero-navy font-medium">{reasoning}</p>
+              </div>
+
+              <div className="rounded-2xl bg-[#F8FBFD] border border-neutral-200 p-4">
+                <h4 className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-3">Observed Evidence</h4>
+                <div className="space-y-3 text-sm leading-6 text-neutral-600">
+                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Skin</span> {evidence.skin}</p>
+                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Hair</span> {evidence.hair}</p>
+                  <p><span className="font-black uppercase text-xero-navy text-[11px] tracking-[0.16em]">Eyes</span> {evidence.eyes}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] gap-5 md:gap-6 items-start">
+        <section className="grid gap-4 sm:grid-cols-2">
           {signalCards.map((stat) => {
             const appearance = getSignalAppearance(stat.value);
 
@@ -312,13 +316,13 @@ export default function ResultsView({
               </div>
             );
           })}
-        </div>
+        </section>
 
-        <div className="bg-white rounded-3xl p-7 md:p-8 flex-1 border border-neutral-100 shadow-xl">
+        <section className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl">
           <h3 className="text-[10px] font-mono uppercase mb-6 text-xero-blue font-black tracking-widest underline underline-offset-8">
             Primary Pigmentation Matrix
           </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-5">
             {palette.colors.map((color, index) => (
               <motion.div
                 key={index}
@@ -338,16 +342,16 @@ export default function ResultsView({
               </motion.div>
             ))}
           </div>
-        </div>
+        </section>
+      </div>
 
-        <button
-          onClick={onReset}
-          className="w-full bg-white text-xero-navy p-6 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg hover:shadow-xl hover:bg-neutral-50 transition-all flex items-center justify-center gap-3 border border-neutral-200"
-        >
-          <RefreshCw className="w-4 h-4 text-xero-blue" />
-          Analyze Another Attendee
-        </button>
-      </section>
+      <button
+        onClick={onReset}
+        className="w-full bg-white text-xero-navy p-6 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg hover:shadow-xl hover:bg-neutral-50 transition-all flex items-center justify-center gap-3 border border-neutral-200"
+      >
+        <RefreshCw className="w-4 h-4 text-xero-blue" />
+        Analyze Another Attendee
+      </button>
     </div>
   );
 }

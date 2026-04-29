@@ -369,45 +369,72 @@ export default defineConfig(({mode}) => {
                   return sendJson(res, 400, { error: 'Unknown season.' });
                 }
                 const colorList = paletteColors.join(', ');
-                const prompt = `Editorial full-body fashion portrait of the person in the provided image.
-Preserve their identity exactly - same face, bone structure, skin tone, eye
-color, hairline, body type, and proportions. Photorealistic skin with
-visible texture, pores, fine peach fuzz, and individual hair strands. No
-retouched plastic finish, no AI smoothing.
+                const prompt = `Photorealistic full-body portrait of the person in the provided image.
+Preserve their identity exactly — same face, bone structure, skin tone,
+eye color, hairline, body type, and proportions. Photorealistic skin
+with visible texture, pores, fine peach fuzz, and individual hair
+strands. No retouched plastic finish, no AI smoothing.
 
-The subject is wearing a contemporary ${body.style} outfit with a 2026 editorial
-sensibility: modern silhouettes, considered proportions, intentional
-layering, and tactile material detail - visible fabric weave, natural
-drape, real shadows in the folds, believable shoes and accessories. Styling
-should feel pulled from a current fashion magazine, not a stock catalog or
-costume rental.
+The subject is dressed in a contemporary ${body.style} outfit — the kind of
+real, wearable clothing a stylish person would actually own and put on
+in 2026. Think elevated everyday: well-fitted basics, modern but
+familiar silhouettes, quality fabrics, considered but unfussy styling.
+Reference register: Uniqlo, COS, Aritzia, Everlane, J.Crew, Reformation,
+Buck Mason, Norse Projects — premium high-street, not high fashion.
+The clothes should look bought off the rack, not styled by an editor.
+Visible fabric texture (knit weave, denim grain, cotton drape, soft
+brushed jersey) and natural folds where the garment hangs.
+
+The outfit must read as appropriate to the ${body.style} category, the way
+a real person would interpret it:
+  • Loungewear  → soft sweats, joggers, henleys, hoodies, knit sets — at-home comfortable.
+  • Casual      → jeans/chinos + t-shirt or knit, simple jacket if needed.
+  • Smart casual → tailored trousers, button-down or fine-gauge knit, clean sneakers or loafers.
+  • Formal      → well-cut suit or tailored dress, minimal accessories.
+  • Sporty      → modern athleisure, technical fabrics, clean lines.
+Always interpret ${body.style} literally — do not push it toward fashion-week styling.
 
 Color direction is locked to the ${body.season} palette: ${colorList}. Every
-visible garment and accessory must sit inside this palette - no
-off-palette colors anywhere in the wardrobe. Use the palette confidently:
-a dominant hero color, a supporting tone, and an accent.
+visible garment and accessory must sit inside this palette — no
+off-palette colors. Use one dominant color, one supporting tone, and
+optionally one quiet accent. Keep the look cohesive and calm, not bold
+or attention-seeking. Maximum two layers visible at once.
 
-Background is tonally complementary but quiet: a sunlit minimalist
-interior, a soft architectural exterior, a textured plaster or concrete
-wall, or a clean seamless gradient. It should feel current and gallery-like
-- never a generic office, hotel lobby, or stock "professional environment."
+Background is understated and tonally complementary: a sunlit
+minimalist room, a soft plaster or concrete wall, a clean architectural
+exterior, or a seamless gradient. It should read as a real space, not a
+fashion campaign location or a styled set.
 
 Camera: shot on a full-frame body with an 85mm prime at f/2.0. Shallow
 depth of field, tack-sharp focus on the face, gentle background falloff.
-Lighting is directional and cinematic with a subtle rim separating the
-subject from the background - not flat studio fill. Slight film grain.
+Lighting is natural and directional — soft window light or even daylight
+with a subtle rim separating the subject from the background. Slight
+film grain.
 
-Pose is relaxed and candid: weight on one leg, hands placed naturally,
-shoulders not squared to camera, an unforced confident expression. Avoid
-catalog stiffness and forced symmetry.
+Pose is relaxed and natural: weight on one leg, hands placed casually
+(in pockets, at the side, lightly holding a phone or coffee), shoulders
+not squared to camera, an unforced expression. Reads as a candid photo
+of a real person, not a posed shoot.
 
-Overall aesthetic: high-end fashion editorial - Vogue, SSENSE, Net-a-Porter,
-Zara campaign quality. Modern, striking, hyper-realistic.
+Overall feel: a stylish, well-shot photo of a real person in real,
+buyable clothing. Aspirational but accessible. Modern but not
+avant-garde.
 
-Avoid: dated or costume-y styling, plastic AI skin, glossy over-retouched
-faces, overly symmetrical poses, blurred or warped hands, generic corporate
-backdrops, low-contrast flat lighting, fabric without texture, off-palette
-colors.`;
+AVOID:
+  • Draped shawls, capes, ponchos, oversized scarves, blanket-style
+    overlays, asymmetric drapery, sculptural pieces.
+  • Statement runway silhouettes, conceptual fashion, costume styling,
+    fashion-week looks, "styled by an editor" energy.
+  • More than two visible layers stacked together.
+  • Oversized statement jewelry, sculptural bags, dramatic belts, large
+    decorative scarves.
+  • Plastic AI skin, glossy over-retouching, warped or extra fingers,
+    melted hands, smeared facial features.
+  • Off-palette colors anywhere in the look.
+  • Generic corporate or hotel-lobby backdrops, "modern professional
+    environment" stock settings.
+  • Catalog stiffness, forced symmetry, dated styling, costume-y
+    period references.`;
                 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
                 const response = await ai.models.generateContent({
                   model: 'gemini-2.5-flash-image',
