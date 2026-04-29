@@ -74,13 +74,13 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
           <div className="bg-white rounded-3xl p-7 md:p-8 flex-1 flex flex-col justify-center border border-neutral-100 shadow-xl">
             <div className="mb-8 md:mb-10">
               <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest underline underline-offset-8">Server Logic Stream</h3>
-              <div className="h-16 md:h-20 overflow-hidden">
+              <div className="min-h-[7rem] md:min-h-[8rem] overflow-visible">
                 <motion.p 
                   key={msgIndex}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
-                  className="text-2xl md:text-[2.3rem] leading-tight font-black uppercase tracking-tighter text-xero-navy max-w-[14ch]"
+                  className="text-2xl md:text-[2.2rem] leading-[1.05] font-black uppercase tracking-tighter text-xero-navy max-w-[12ch] pr-4"
                 >
                   {MESSAGES[msgIndex]}
                 </motion.p>

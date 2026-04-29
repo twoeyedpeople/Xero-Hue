@@ -59,7 +59,7 @@ export default function ResultsView({
       {/* Left: Visual Synthesis */}
       <section className="md:col-span-5 flex flex-col gap-5 md:gap-6">
         <div className="bg-white rounded-[2rem] relative aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-100 group">
-          <div className="absolute top-6 left-6 z-20 bg-xero-navy/80 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
+          <div className="absolute bottom-6 left-6 z-20 bg-xero-navy/85 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
             Wardrobe Synthesis // {style}
           </div>
           {synthesizedImage ? (
