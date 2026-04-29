@@ -72,8 +72,8 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
   };
 
   return (
-    <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-8 overflow-hidden py-4">
-      <section className="md:col-span-8 bg-xero-navy rounded-2xl relative overflow-hidden shadow-2xl">
+    <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 overflow-visible py-4">
+      <section className="xl:col-span-8 bg-xero-navy rounded-2xl relative overflow-hidden shadow-2xl min-h-[420px] md:min-h-[560px] xl:min-h-0">
         <div className="absolute top-6 left-6 z-20 bg-xero-blue text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full">
           Live Analysis Stream
         </div>
@@ -87,7 +87,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
         
         {/* Face Overlay Guideline */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="w-64 h-80 rounded-[4rem] border-2 border-dashed border-white/20 bg-white/5 backdrop-blur-[1px]" />
+          <div className="w-[16rem] h-[20rem] md:w-[19rem] md:h-[24rem] rounded-[4rem] border-2 border-dashed border-white/20 bg-white/5 backdrop-blur-[1px]" />
         </div>
 
         <AnimatePresence>
@@ -110,7 +110,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
         )}
       </section>
 
-      <section className="md:col-span-4 flex flex-col gap-6">
+      <section className="xl:col-span-4 flex flex-col gap-6">
         <div className="bg-white rounded-2xl p-8 flex-1 flex flex-col justify-center border border-neutral-200">
           <h3 className="text-[10px] font-mono uppercase mb-4 opacity-40">Status: Calibration Stable</h3>
           <h2 className="text-4xl font-black text-xero-navy uppercase leading-tight mb-4 tracking-tighter">Perfect Frame</h2>
@@ -122,7 +122,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
             <button 
               onClick={takePhoto}
               disabled={!isReady || countdown !== null}
-              className="w-full bg-xero-blue text-white font-black py-5 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 group flex items-center justify-center gap-3 text-sm uppercase tracking-wider"
+              className="w-full bg-xero-blue text-white font-black py-5 md:py-6 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 group flex items-center justify-center gap-3 text-sm md:text-base uppercase tracking-wider"
             >
               <Camera className="w-5 h-5" />
               Capture Identity

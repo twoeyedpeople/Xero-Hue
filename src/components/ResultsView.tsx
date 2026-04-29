@@ -48,9 +48,9 @@ export default function ResultsView({
   };
 
   return (
-    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 overflow-y-auto pb-12 pt-4">
+    <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 overflow-y-auto pb-12 pt-4">
       {/* Left: Visual Synthesis */}
-      <section className="lg:col-span-5 flex flex-col gap-8">
+      <section className="xl:col-span-5 flex flex-col gap-6 xl:gap-8">
         <div className="bg-white rounded-[2rem] relative aspect-[4/5] overflow-hidden shadow-2xl border border-neutral-100 group">
           <div className="absolute top-6 left-6 z-20 bg-xero-navy/80 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
             Wardrobe Synthesis // {style}
@@ -103,7 +103,7 @@ export default function ResultsView({
       </section>
 
       {/* Right: Data Analysis */}
-      <section className="lg:col-span-7 flex flex-col gap-8">
+      <section className="xl:col-span-7 flex flex-col gap-6 xl:gap-8">
         {/* Result Header */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
           <div className="bg-white rounded-3xl p-8 md:p-9 border border-neutral-100 shadow-xl xl:col-span-8">
@@ -160,13 +160,18 @@ export default function ResultsView({
               tone: chroma.toLowerCase().includes('bright') || chroma.toLowerCase().includes('clear') ? 'High clarity and saturation' : 'Softened and muted saturation',
             }
           ].map((stat, i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-lg">
-              <div className="flex items-center justify-between gap-3 mb-4">
-                <h4 className="text-[10px] font-mono uppercase text-neutral-400 font-bold tracking-[0.24em]">{stat.label}</h4>
-                <span className={`w-3 h-3 rounded-full ${stat.indicator} shadow-sm`} />
+            <div key={i} className="bg-white rounded-2xl p-5 md:p-6 border border-neutral-100 shadow-lg">
+              <div className="flex items-start justify-between gap-4 mb-5">
+                <div>
+                  <h4 className="text-[10px] font-mono uppercase text-neutral-400 font-bold tracking-[0.24em] mb-3">{stat.label}</h4>
+                  <div className="flex items-center gap-4">
+                    <span className={`w-8 h-8 md:w-10 md:h-10 rounded-full ${stat.indicator} shadow-[0_10px_24px_rgba(0,43,73,0.18)] ring-4 ring-white`} />
+                    <p className="font-black text-xl md:text-2xl text-xero-navy uppercase tracking-wide">{stat.value}</p>
+                  </div>
+                </div>
+                <span className={`w-4 h-4 rounded-full ${stat.indicator} opacity-30 mt-1`} />
               </div>
-              <p className="font-black text-xl text-xero-navy uppercase tracking-wide mb-2">{stat.value}</p>
-              <p className="text-sm text-neutral-500 leading-6">{stat.tone}</p>
+              <p className="text-sm md:text-base text-neutral-500 leading-6 md:leading-7 max-w-[24ch]">{stat.tone}</p>
             </div>
           ))}
         </div>

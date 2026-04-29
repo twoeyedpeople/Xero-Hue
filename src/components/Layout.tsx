@@ -11,23 +11,23 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-[#F4F7F9] text-xero-navy font-sans p-4 md:p-8 flex flex-col gap-6 selection:bg-xero-blue selection:text-white">
+    <div className="min-h-screen bg-[#F4F7F9] text-xero-navy font-sans p-4 md:p-6 xl:p-8 flex flex-col gap-5 md:gap-6 selection:bg-xero-blue selection:text-white">
       {/* Header Section */}
-      <header className="flex justify-between items-end border-b border-neutral-300 pb-6">
+      <header className="flex justify-between items-end gap-4 border-b border-neutral-300 pb-5 md:pb-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-xero-navy mb-2">Hue &amp; You</h1>
-          <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-50">
+          <h1 className="text-2xl md:text-3xl xl:text-4xl font-black tracking-tight text-xero-blue mb-2">Hue &amp; You</h1>
+          <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.18em] md:tracking-[0.2em] opacity-50">
             Professional Color Analysis Engine // Brisbane 2025
           </p>
         </div>
         <img
           src="/xero-wordmark-blue.png"
           alt="Xero"
-          className="h-8 md:h-10 w-auto object-contain shrink-0"
+          className="h-7 md:h-8 xl:h-10 w-auto object-contain shrink-0"
         />
       </header>
 
-      <main className="flex-1 flex flex-col overflow-hidden relative">
+      <main className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto relative">
         {children}
       </main>
 

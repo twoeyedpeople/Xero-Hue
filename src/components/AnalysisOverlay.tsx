@@ -32,15 +32,15 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#F4F7F9]">
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-10 h-[600px]">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 md:px-6 md:py-8 bg-[#F4F7F9]">
+      <div className="w-full max-w-5xl grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-10 min-h-[620px] xl:h-[600px]">
         {/* Left: Animated Scanner */}
-        <section className="md:col-span-5 bg-xero-navy rounded-3xl relative overflow-hidden flex items-center justify-center shadow-2xl">
+        <section className="xl:col-span-5 bg-xero-navy rounded-3xl relative overflow-hidden flex items-center justify-center shadow-2xl min-h-[360px] md:min-h-[440px] xl:min-h-0">
           <div className="absolute top-6 left-6 z-10 bg-xero-blue text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full">
             Biometric Linkage
           </div>
           
-          <div className="w-64 h-80 border-2 border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center relative bg-white/5 backdrop-blur-sm">
+          <div className="w-[15.5rem] h-[19.5rem] md:w-[18rem] md:h-[22rem] border-2 border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center relative bg-white/5 backdrop-blur-sm">
             <motion.div 
                animate={{ y: [0, 320, 0] }}
                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -70,7 +70,7 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
         </section>
 
         {/* Right: Status Panel */}
-        <section className="md:col-span-7 flex flex-col gap-6">
+        <section className="xl:col-span-7 flex flex-col gap-6">
           <div className="bg-white rounded-3xl p-10 flex-1 flex flex-col justify-center border border-neutral-100 shadow-xl">
             <div className="mb-12">
               <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest underline underline-offset-8">Server Logic Stream</h3>
@@ -80,7 +80,7 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
-                  className="text-3xl font-black uppercase tracking-tighter text-xero-navy"
+                  className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-xero-navy"
                 >
                   {MESSAGES[msgIndex]}
                 </motion.p>
@@ -103,7 +103,7 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                  <div className="bg-white rounded-2xl p-6 h-32 flex flex-col justify-between border border-neutral-100">
                     <span className="text-[9px] font-mono uppercase opacity-40">Gemini Core</span>
                     <motion.span 
