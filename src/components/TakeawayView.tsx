@@ -61,9 +61,6 @@ export default function TakeawayView({
                   Copy Link
                 </button>
               </div>
-              <p className="text-xs text-neutral-500 xl:text-right max-w-[320px]">
-                The PDF button opens your device&apos;s print or save-to-PDF flow.
-              </p>
             </div>
           </div>
 
@@ -87,7 +84,7 @@ export default function TakeawayView({
                 <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-xero-blue font-bold mb-2">
                   Primary Pigmentation Matrix
                 </p>
-                <p className="text-sm text-neutral-500">Suggested style profile: {style}</p>
+                <p className="text-sm text-neutral-500">Requested style profile: {style}</p>
               </div>
             </div>
 

@@ -151,7 +151,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
         <div className="bg-xero-navy text-white p-6 rounded-2xl font-mono text-[9px] uppercase space-y-2 opacity-90">
           <div className="flex justify-between border-b border-white/10 pb-2"><span>Sensor:</span><span className="text-xero-blue">OPTIMIZED</span></div>
           <div className="flex justify-between border-b border-white/10 pb-2"><span>Processing:</span><span>SERVER-SIDE</span></div>
-          <div className="flex justify-between"><span>Region:</span><span>BRISBANE (BNE)</span></div>
+          <div className="flex justify-between"><span>Region:</span><span>LONDON (LON)</span></div>
         </div>
       </section>
 

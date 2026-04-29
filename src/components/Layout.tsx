@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-[#F4F7F9] text-xero-navy font-sans p-4 md:p-6 xl:p-8 flex flex-col gap-5 md:gap-6 selection:bg-xero-blue selection:text-white">
+    <div className="h-screen overflow-hidden bg-[#F4F7F9] text-xero-navy font-sans p-4 md:p-6 xl:p-8 flex flex-col gap-4 md:gap-5 selection:bg-xero-blue selection:text-white">
       {/* Header Section */}
       <header className="flex justify-between items-end gap-4 border-b border-neutral-300 pb-5 md:pb-6">
         <div>
@@ -27,7 +27,7 @@ export default function Layout({ children }: LayoutProps) {
         />
       </header>
 
-      <main className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto relative">
+      <main className="flex-1 min-h-0 flex flex-col overflow-x-hidden overflow-y-auto relative">
         {children}
       </main>
 
