@@ -18,6 +18,30 @@ export enum Season {
   BRIGHT_WINTER = 'Bright Winter',
 }
 
+export type AnalysisHue = 'Warm' | 'Cool' | 'Neutral';
+export type AnalysisValue = 'Light' | 'Medium' | 'Deep';
+export type AnalysisChroma = 'Bright' | 'Neutral' | 'Muted';
+export type AnalysisAxis = 'Warm' | 'Cool' | 'Light' | 'Deep' | 'Bright' | 'Muted';
+export type AnalysisContrast = 'High' | 'Medium-High' | 'Medium' | 'Low';
+
+export interface PaletteAnalysis {
+  season: Season;
+  hue: AnalysisHue;
+  value: AnalysisValue;
+  chroma: AnalysisChroma;
+  dominant: AnalysisAxis;
+  secondary: AnalysisAxis;
+  contrast: AnalysisContrast;
+  evidence: {
+    skin: string;
+    hair: string;
+    eyes: string;
+  };
+  imageQualityIssues: string;
+  confidence: number;
+  reasoning: string;
+}
+
 export interface ColorSwatch {
   name: string;
   hex: string;
@@ -33,7 +57,7 @@ export interface Palette {
   characteristics: {
     hue: 'Warm' | 'Cool' | 'Neutral-Warm' | 'Neutral-Cool';
     value: 'Light' | 'Deep' | 'Medium';
-    chroma: 'Bright' | 'Muted' | 'Clear';
+    chroma: AnalysisChroma;
   };
 }
 

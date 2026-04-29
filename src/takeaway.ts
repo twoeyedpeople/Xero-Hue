@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Season, Style } from './types';
+import { AnalysisChroma, AnalysisHue, AnalysisValue, Season, Style } from './types';
 
 export interface TakeawayPayload {
   id?: string;
   season: Season;
-  hue: string;
-  value: string;
-  chroma: string;
+  hue: AnalysisHue;
+  value: AnalysisValue;
+  chroma: AnalysisChroma;
   style: Style;
   confidence: number;
 }
@@ -62,6 +62,10 @@ export function parseTakeawayFromSearch(search: string): TakeawayPayload | null 
   const value = params.get('value');
   const chroma = params.get('chroma');
 
+  const validHues: AnalysisHue[] = ['Warm', 'Cool', 'Neutral'];
+  const validValues: AnalysisValue[] = ['Light', 'Medium', 'Deep'];
+  const validChromas: AnalysisChroma[] = ['Bright', 'Neutral', 'Muted'];
+
   if (
     !season ||
     !style ||
@@ -69,7 +73,10 @@ export function parseTakeawayFromSearch(search: string): TakeawayPayload | null 
     !value ||
     !chroma ||
     !Object.values(Season).includes(season as Season) ||
-    !Object.values(Style).includes(style as Style)
+    !Object.values(Style).includes(style as Style) ||
+    !validHues.includes(hue as AnalysisHue) ||
+    !validValues.includes(value as AnalysisValue) ||
+    !validChromas.includes(chroma as AnalysisChroma)
   ) {
     return null;
   }
@@ -77,9 +84,9 @@ export function parseTakeawayFromSearch(search: string): TakeawayPayload | null 
   return {
     id,
     season: season as Season,
-    hue,
-    value,
-    chroma,
+    hue: hue as AnalysisHue,
+    value: value as AnalysisValue,
+    chroma: chroma as AnalysisChroma,
     style: style as Style,
     confidence: Number(params.get('confidence') ?? '0.984'),
   };

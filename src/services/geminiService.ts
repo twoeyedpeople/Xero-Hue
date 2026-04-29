@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Season, Style } from "../types";
+import { PaletteAnalysis, Season, Style } from "../types";
 
 // Simple guest ID helper
 const GUEST_ID_KEY = 'hue_you_guest_id';
@@ -14,15 +14,6 @@ export function getGuestId() {
     localStorage.setItem(GUEST_ID_KEY, id);
   }
   return id;
-}
-
-interface PaletteAnalysisResult {
-  season: Season;
-  hue: string;
-  value: string;
-  chroma: string;
-  confidence: number;
-  reasoning: string;
 }
 
 async function postJson<T>(url: string, body: Record<string, unknown>): Promise<T> {
@@ -46,8 +37,8 @@ async function postJson<T>(url: string, body: Record<string, unknown>): Promise<
   return payload as T;
 }
 
-export async function analyzeUserPalette(image64: string): Promise<PaletteAnalysisResult> {
-  return postJson<PaletteAnalysisResult>("/api/analyze-palette", { image64 });
+export async function analyzeUserPalette(image64: string): Promise<PaletteAnalysis> {
+  return postJson<PaletteAnalysis>("/api/analyze-palette", { image64 });
 }
 
 export async function generateStylizedImage(

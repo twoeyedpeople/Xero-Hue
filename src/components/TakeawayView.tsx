@@ -6,7 +6,7 @@
 import React from 'react';
 import { Download, Link as LinkIcon } from 'lucide-react';
 import { PALETTES } from '../constants';
-import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
+import { SEASON_SUMMARIES } from '../seasonNarratives';
 import { TakeawayPayload, buildTakeawayUrl, formatConfidence } from '../takeaway';
 
 export default function TakeawayView({

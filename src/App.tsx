@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { AppState, Season, Style } from './types';
+import { AppState, PaletteAnalysis, Style } from './types';
 import Layout from './components/Layout';
 import Welcome from './components/Welcome';
 import Consent from './components/Consent';
@@ -26,13 +26,7 @@ export default function App() {
   const [state, setState] = useState<AppState>('welcome');
   const [userImage, setUserImage] = useState<string | undefined>(undefined);
   const [selectedStyle, setSelectedStyle] = useState<Style | undefined>(undefined);
-  const [analysis, setAnalysis] = useState<{
-    season: Season;
-    hue: string;
-    value: string;
-    chroma: string;
-    confidence: number;
-  } | null>(null);
+  const [analysis, setAnalysis] = useState<PaletteAnalysis | null>(null);
   const [synthesizedImage, setSynthesizedImage] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [guestId, setGuestId] = useState<string>('');
@@ -108,7 +102,6 @@ export default function App() {
               {state === 'results' && analysis && selectedStyle && (
                 <ResultsView 
                   {...analysis} 
-                  userImage={userImage} 
                   synthesizedImage={synthesizedImage}
                   onReset={handleReset}
                   style={selectedStyle}
