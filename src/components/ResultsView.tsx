@@ -142,21 +142,21 @@ export default function ResultsView({
         </div>
 
         {seasonTitleAsset ? (
-          <div className="bg-white rounded-3xl p-6 md:p-7 border border-neutral-100 shadow-xl">
-            <div className="flex items-center justify-between gap-4 mb-5">
-              <div>
+          <div className="lg:grid lg:grid-cols-12 gap-5 hidden">
+            <div className="lg:col-start-9 lg:col-span-4 bg-white rounded-3xl p-4 border border-neutral-100 shadow-xl">
+              <div className="mb-3">
                 <h3 className="text-[10px] font-mono uppercase text-xero-blue font-black tracking-widest mb-2">
                   Seasonal Signature
                 </h3>
                 <p className="text-sm text-neutral-500">Your palette family marker for quick recognition.</p>
               </div>
-            </div>
-            <div className="min-h-[190px] md:min-h-[220px] rounded-[1.75rem] bg-[#F8FBFD] border border-neutral-100 flex items-center justify-center p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
-              <img
-                src={seasonTitleAsset}
-                alt={`${palette.title} seasonal title artwork`}
-                className="w-full max-w-[440px] h-auto"
-              />
+              <div className="rounded-[1.75rem] bg-[#F8FBFD] border border-neutral-100 flex items-center justify-center p-[60px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
+                <img
+                  src={seasonTitleAsset}
+                  alt={`${palette.title} seasonal title artwork`}
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
           </div>
         ) : null}
