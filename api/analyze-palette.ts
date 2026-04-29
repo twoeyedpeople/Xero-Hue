@@ -1,4 +1,4 @@
-import { analyzePaletteFromImage } from "../server/geminiApi";
+import { analyzePaletteFromImage } from "./_lib/geminiApi";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {

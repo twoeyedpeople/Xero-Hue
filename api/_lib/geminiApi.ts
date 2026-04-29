@@ -1,6 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { PALETTES } from "../src/constants";
-import { Season, Style } from "../src/types";
+import { PALETTES } from "../../src/constants";
+import { Season, Style } from "../../src/types";
 
 interface PaletteAnalysisResult {
   season: Season;
