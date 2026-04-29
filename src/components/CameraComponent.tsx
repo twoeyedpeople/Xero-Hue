@@ -18,6 +18,8 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
   const [isReady, setIsReady] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [capturedFrame, setCapturedFrame] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const captureTips = [
     'Please align your face within the guide',
     'Ensure your face is clearly visible',
@@ -51,6 +53,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
   }, []);
 
   const takePhoto = () => {
+    if (isTransitioning) return;
     setCountdown(3);
   };
 
@@ -73,10 +76,21 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
         canvasRef.current.height = videoRef.current.videoHeight;
         context.drawImage(videoRef.current, 0, 0);
         const dataUrl = canvasRef.current.toDataURL('image/jpeg');
-        onCapture(dataUrl);
+        setCapturedFrame(dataUrl);
+        setIsTransitioning(true);
       }
     }
   };
+
+  useEffect(() => {
+    if (!capturedFrame || !isTransitioning) return;
+
+    const timer = setTimeout(() => {
+      onCapture(capturedFrame);
+    }, 850);
+
+    return () => clearTimeout(timer);
+  }, [capturedFrame, isTransitioning, onCapture]);
 
   return (
     <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 overflow-visible py-4">
@@ -89,8 +103,18 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
           ref={videoRef} 
           autoPlay 
           playsInline 
-          className="w-full h-full object-cover opacity-90 transition-opacity duration-1000"
+          className={`w-full h-full object-cover transition-opacity duration-300 ${capturedFrame ? 'opacity-0' : 'opacity-90'}`}
         />
+
+        {capturedFrame && (
+          <motion.img
+            initial={{ opacity: 0, scale: 1.01 }}
+            animate={{ opacity: 1, scale: 1 }}
+            src={capturedFrame}
+            alt="Captured identity preview"
+            className="absolute inset-0 w-full h-full object-cover z-[5]"
+          />
+        )}
         
         {/* Face Overlay Guideline */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
@@ -106,6 +130,21 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
               className="absolute inset-0 flex items-center justify-center bg-xero-navy/40 backdrop-blur-sm z-30 pointer-events-none"
             >
               <span className="text-white text-[12rem] font-black tracking-tighter">{countdown}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {capturedFrame && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-xero-navy/15 z-20 pointer-events-none"
+            >
+              <div className="absolute bottom-6 right-6 bg-white/92 text-xero-navy px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.18em] shadow-lg">
+                Identity Captured
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -133,7 +172,7 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
           <div className="space-y-4">
             <button 
               onClick={takePhoto}
-              disabled={!isReady || countdown !== null}
+              disabled={!isReady || countdown !== null || isTransitioning}
               className="w-full bg-xero-blue text-white font-black py-5 md:py-6 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 group flex items-center justify-center gap-3 text-sm md:text-base uppercase tracking-wider"
             >
               <Camera className="w-5 h-5" />

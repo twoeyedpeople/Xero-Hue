@@ -116,13 +116,13 @@ export default function AnalysisOverlay({ userImage }: AnalysisOverlayProps) {
                  </div>
                  <div className="bg-xero-navy rounded-2xl p-6 h-32 flex flex-col justify-between text-white">
                     <span className="text-[9px] font-mono uppercase opacity-40">Pulse Rate</span>
-                    <div className="flex gap-1.5 items-end h-8">
+                    <div className="flex items-end justify-between gap-2 h-8 w-full">
                        {[...Array(8)].map((_, i) => (
                          <motion.div 
                             key={i}
                             animate={{ height: [6, 24, 6] }}
                             transition={{ duration: 0.6, delay: i * 0.08, repeat: Infinity }}
-                            className="w-1.5 bg-xero-blue rounded-full"
+                            className="flex-1 max-w-[14px] bg-xero-blue rounded-full"
                          />
                        ))}
                     </div>

@@ -284,12 +284,12 @@ export default function ResultsView({
               <div key={stat.label} className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-lg min-h-[164px] flex flex-col justify-between">
                 <div className="flex items-start justify-between gap-4 mb-5">
                   <div className="min-w-0">
-                    <h4 className="text-[10px] font-mono uppercase text-neutral-400 font-bold tracking-[0.24em] mb-3">
+                    <h4 className="text-[11px] md:text-[12px] font-mono uppercase text-neutral-400 font-bold tracking-[0.26em] mb-3">
                       {stat.label}
                     </h4>
                     <div className="flex items-center gap-4">
                       <span className={`w-9 h-9 md:w-11 md:h-11 rounded-full ${appearance.chip} shadow-[0_10px_24px_rgba(0,43,73,0.18)] ring-4 ring-white shrink-0`} />
-                      <p className="font-black text-xl md:text-[1.7rem] text-xero-navy uppercase tracking-tight leading-none">
+                      <p className="font-black text-lg md:text-[1.45rem] text-xero-navy uppercase tracking-tight leading-none">
                         {stat.value}
                       </p>
                     </div>
