@@ -20,7 +20,7 @@ export default function Welcome({ onStart }: WelcomeProps) {
       >
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-xero-blue/10 rounded-full text-xero-blue text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-8 border border-xero-blue/20">
           <div className="w-2 h-2 bg-xero-blue rounded-full animate-pulse" />
-          Brisbane 2025 // AI ACTIVATION
+          London 2026 // AI ACTIVATION
         </div>
         
         <h2 className="text-5xl md:text-7xl xl:text-9xl font-black text-xero-navy tracking-tighter leading-[0.88] md:leading-[0.85] mb-6 md:mb-8">

@@ -35,7 +35,14 @@ export default function ResultsView({
   style
 }: ResultsViewProps) {
   const palette = PALETTES[season];
-  const shareUrl = buildTakeawayUrl({ season, hue, value, chroma, style, confidence });
+  const takeawayId = React.useMemo(
+    () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    []
+  );
+  const shareUrl = React.useMemo(
+    () => buildTakeawayUrl({ id: takeawayId, season, hue, value, chroma, style, confidence }),
+    [takeawayId, season, hue, value, chroma, style, confidence]
+  );
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
   const formattedConfidence = formatConfidence(confidence);
 
@@ -48,10 +55,10 @@ export default function ResultsView({
   };
 
   return (
-    <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 overflow-y-auto pb-12 pt-4">
+    <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 overflow-y-auto pb-12 pt-4 items-start">
       {/* Left: Visual Synthesis */}
-      <section className="xl:col-span-5 flex flex-col gap-6 xl:gap-8">
-        <div className="bg-white rounded-[2rem] relative aspect-[4/5] overflow-hidden shadow-2xl border border-neutral-100 group">
+      <section className="md:col-span-5 flex flex-col gap-5 md:gap-6">
+        <div className="bg-white rounded-[2rem] relative aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-100 group">
           <div className="absolute top-6 left-6 z-20 bg-xero-navy/80 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
             Wardrobe Synthesis // {style}
           </div>
@@ -71,11 +78,11 @@ export default function ResultsView({
           )}
         </div>
 
-        <div className="bg-xero-navy text-white rounded-3xl p-8 shadow-xl">
+        <div className="bg-xero-navy text-white rounded-3xl p-6 shadow-xl">
            <h4 className="text-[10px] font-mono uppercase mb-6 text-xero-blue font-black tracking-widest">Digital Takeaway</h4>
-           <div className="flex items-center gap-8">
+           <div className="flex items-center gap-6">
               <div className="p-3 bg-white rounded-2xl shadow-inner shrink-0">
-                <QRCodeCanvas value={shareUrl} size={124} fgColor="#002B49" />
+                <QRCodeCanvas value={shareUrl} size={108} fgColor="#002B49" />
               </div>
               <div className="flex-1">
                 <p className="text-xs font-medium text-neutral-300 leading-relaxed mb-6">
@@ -103,13 +110,13 @@ export default function ResultsView({
       </section>
 
       {/* Right: Data Analysis */}
-      <section className="xl:col-span-7 flex flex-col gap-6 xl:gap-8">
+      <section className="md:col-span-7 flex flex-col gap-5 md:gap-6">
         {/* Result Header */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-          <div className="bg-white rounded-3xl p-8 md:p-9 border border-neutral-100 shadow-xl xl:col-span-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl lg:col-span-8">
             <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Identified Persona</h3>
-            <h2 className="text-4xl md:text-5xl font-black text-xero-navy uppercase leading-none tracking-tighter mb-5">{palette.title}</h2>
-            <p className="text-sm md:text-base font-medium text-neutral-600 leading-7">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.4rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">{palette.title}</h2>
+            <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
               {summary}
             </p>
             <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-400 mt-5">
@@ -119,7 +126,7 @@ export default function ResultsView({
               </a>
             </p>
           </div>
-          <div className="bg-xero-blue text-white rounded-3xl p-6 md:p-7 flex flex-col justify-between shadow-xl xl:col-span-4 min-h-[180px]">
+          <div className="bg-xero-blue text-white rounded-3xl p-6 flex flex-col justify-between shadow-xl lg:col-span-4 min-h-[180px]">
              <div className="flex justify-between items-start gap-4">
                 <h3 className="text-[10px] font-mono uppercase text-white/70 font-bold tracking-[0.22em]">Analysis Precision</h3>
                 <span className="text-2xl md:text-3xl font-black">{formattedConfidence}</span>
@@ -139,7 +146,7 @@ export default function ResultsView({
         </div>
 
         {/* Technical Breakdown */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {[
             {
               label: 'Hue',
@@ -160,7 +167,7 @@ export default function ResultsView({
               tone: chroma.toLowerCase().includes('bright') || chroma.toLowerCase().includes('clear') ? 'High clarity and saturation' : 'Softened and muted saturation',
             }
           ].map((stat, i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 md:p-6 border border-neutral-100 shadow-lg">
+            <div key={i} className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-lg min-h-[170px] flex flex-col justify-between">
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
                   <h4 className="text-[10px] font-mono uppercase text-neutral-400 font-bold tracking-[0.24em] mb-3">{stat.label}</h4>
@@ -171,15 +178,15 @@ export default function ResultsView({
                 </div>
                 <span className={`w-4 h-4 rounded-full ${stat.indicator} opacity-30 mt-1`} />
               </div>
-              <p className="text-sm md:text-base text-neutral-500 leading-6 md:leading-7 max-w-[24ch]">{stat.tone}</p>
+              <p className="text-sm md:text-[15px] text-neutral-500 leading-6 max-w-[24ch]">{stat.tone}</p>
             </div>
           ))}
         </div>
 
         {/* Color Swatches */}
-        <div className="bg-white rounded-3xl p-10 flex-1 border border-neutral-100 shadow-xl">
-          <h3 className="text-[10px] font-mono uppercase mb-8 text-xero-blue font-black tracking-widest underline underline-offset-8">Primary Pigmentation Matrix</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+        <div className="bg-white rounded-3xl p-7 md:p-8 flex-1 border border-neutral-100 shadow-xl">
+          <h3 className="text-[10px] font-mono uppercase mb-6 text-xero-blue font-black tracking-widest underline underline-offset-8">Primary Pigmentation Matrix</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-5">
             {palette.colors.map((color, i) => (
               <motion.div 
                 key={i}

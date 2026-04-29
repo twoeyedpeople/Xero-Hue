@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
         <div>
           <h1 className="text-2xl md:text-3xl xl:text-4xl font-black tracking-tight text-xero-blue mb-2">Hue &amp; You</h1>
           <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.18em] md:tracking-[0.2em] opacity-50">
-            Professional Color Analysis Engine // Brisbane 2025
+            Professional Color Analysis Engine // London 2026
           </p>
         </div>
         <img
@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="w-2 h-2 rounded-full bg-green-600"></div>
           <div className="w-2 h-2 rounded-full bg-blue-600"></div>
         </div>
-        <span>&copy; 2025 Xerocon Brisbane</span>
+        <span>&copy; 2026 Xerocon London</span>
       </footer>
     </div>
   );

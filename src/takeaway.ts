@@ -6,6 +6,7 @@
 import { Season, Style } from './types';
 
 export interface TakeawayPayload {
+  id?: string;
   season: Season;
   hue: string;
   value: string;
@@ -34,9 +35,11 @@ export function getPublicAppUrl() {
 }
 
 export function buildTakeawayUrl(payload: TakeawayPayload) {
+  const id = payload.id ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
   const params = new URLSearchParams({
     takeaway: '1',
-    id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    id,
     season: payload.season,
     hue: payload.hue,
     value: payload.value,
@@ -52,6 +55,7 @@ export function parseTakeawayFromSearch(search: string): TakeawayPayload | null 
   const params = new URLSearchParams(search);
   if (params.get('takeaway') !== '1') return null;
 
+  const id = params.get('id') ?? undefined;
   const season = params.get('season');
   const style = params.get('style');
   const hue = params.get('hue');
@@ -71,6 +75,7 @@ export function parseTakeawayFromSearch(search: string): TakeawayPayload | null 
   }
 
   return {
+    id,
     season: season as Season,
     hue,
     value,

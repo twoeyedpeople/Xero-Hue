@@ -33,7 +33,7 @@ export default function TakeawayView({
     <div className="w-full max-w-5xl mx-auto py-4 md:py-8">
       <div className="takeaway-sheet bg-white rounded-[2rem] border border-neutral-200 shadow-[0_18px_40px_rgba(0,43,73,0.08)] p-6 md:p-10">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
               <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-xero-blue font-bold mb-3">
                 Mobile Takeaway // Hue &amp; You
@@ -44,28 +44,30 @@ export default function TakeawayView({
               <p className="text-base md:text-lg leading-8 text-neutral-600">{summary}</p>
             </div>
 
-            <div className="print:hidden flex flex-col gap-3 md:items-end md:min-w-[220px]">
-              <button
-                onClick={handleDownloadPdf}
-                className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-xero-blue text-white px-5 py-3 rounded-2xl font-black uppercase text-[11px] tracking-[0.18em] shadow-lg hover:brightness-105 transition-all"
-              >
-                <Download className="w-4 h-4" />
-                Download PDF
-              </button>
-              <button
-                onClick={handleCopyLink}
-                className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-white text-xero-navy px-5 py-3 rounded-2xl font-black uppercase text-[11px] tracking-[0.18em] border border-neutral-200 hover:bg-neutral-50 transition-all"
-              >
-                <LinkIcon className="w-4 h-4 text-xero-blue" />
-                Copy Link
-              </button>
-              <p className="text-xs text-neutral-500 md:text-right">
+            <div className="print:hidden flex flex-col gap-3 xl:min-w-[320px] xl:items-end">
+              <div className="flex flex-wrap gap-3 xl:justify-end">
+                <button
+                  onClick={handleDownloadPdf}
+                  className="inline-flex items-center justify-center gap-2 bg-xero-blue text-white px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-[0.16em] shadow-lg hover:brightness-105 transition-all min-w-[150px]"
+                >
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-xero-navy px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-[0.16em] border border-neutral-200 hover:bg-neutral-50 transition-all min-w-[140px]"
+                >
+                  <LinkIcon className="w-4 h-4 text-xero-blue" />
+                  Copy Link
+                </button>
+              </div>
+              <p className="text-xs text-neutral-500 xl:text-right max-w-[320px]">
                 The PDF button opens your device&apos;s print or save-to-PDF flow.
               </p>
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
               { label: 'Analysis Precision', value: formatConfidence(confidence) },
               { label: 'Hue', value: hue },

@@ -17,10 +17,10 @@ export default function StyleSelector({ onSelect, selectedStyle }: StyleSelector
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-white rounded-3xl p-8 md:p-12 xl:p-16 text-center max-w-5xl mx-auto w-full shadow-xl border border-neutral-100">
-      <h3 className="text-[10px] font-mono uppercase mb-4 tracking-[0.3em] text-xero-blue font-bold">Step 02: Preference Capture</h3>
-      <h2 className="text-4xl md:text-6xl xl:text-7xl font-black text-xero-navy uppercase tracking-tighter mb-6 md:mb-8 leading-[0.9]">Select Your Aesthetic</h2>
-      <p className="text-base md:text-lg xl:text-xl font-medium text-neutral-500 mb-10 md:mb-12 max-w-2xl mx-auto tracking-tight leading-relaxed">
-        Define the stylistic lens through which the Gemini engine will synthesize your color profile.
+      <h3 className="text-[10px] font-mono uppercase mb-4 tracking-[0.3em] text-xero-blue font-bold">Step 02: Visualise Your Colour Palette</h3>
+      <h2 className="text-4xl md:text-6xl xl:text-7xl font-black text-xero-navy uppercase tracking-tighter mb-6 md:mb-8 leading-[0.9]">Choose Your Style</h2>
+      <p className="text-base md:text-lg xl:text-xl font-medium text-neutral-500 mb-10 md:mb-12 max-w-3xl mx-auto tracking-tight leading-relaxed">
+        See your personal colour palette brought to life. Select a style below and we&apos;ll generate imagery that showcases your colours in a real-world aesthetic.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-4 md:gap-5 xl:gap-6 w-full">
