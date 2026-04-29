@@ -17,8 +17,10 @@ import CameraComponent from './components/CameraComponent';
 import StyleSelector from './components/StyleSelector';
 import AnalysisOverlay from './components/AnalysisOverlay';
 import ResultsView from './components/ResultsView';
+import TakeawayView from './components/TakeawayView';
 import { analyzeUserPalette, generateStylizedImage, getGuestId } from './services/geminiService';
 import { AnimatePresence, motion } from 'motion/react';
+import { parseTakeawayFromSearch } from './takeaway';
 
 export default function App() {
   const [state, setState] = useState<AppState>('welcome');
@@ -29,6 +31,7 @@ export default function App() {
     hue: string;
     value: string;
     chroma: string;
+    confidence: number;
   } | null>(null);
   const [synthesizedImage, setSynthesizedImage] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +40,8 @@ export default function App() {
   useEffect(() => {
     setGuestId(getGuestId());
   }, []);
+
+  const sharedTakeaway = parseTakeawayFromSearch(window.location.search);
 
   const handleStart = () => setState('consent');
   const handleConsent = () => setState('camera');
@@ -81,29 +86,35 @@ export default function App() {
   };
 
   return (
-    <Layout patientName={`Partner #${guestId.slice(0, 4).toUpperCase()}`}>
+    <Layout>
       <AnimatePresence mode="wait">
         <motion.div
-          key={state}
+          key={sharedTakeaway ? 'takeaway' : state}
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.4 }}
           className="flex-1 flex flex-col"
         >
-          {state === 'welcome' && <Welcome onStart={handleStart} />}
-          {state === 'consent' && <Consent onAccept={handleConsent} onDecline={handleDecline} />}
-          {state === 'camera' && <CameraComponent onCapture={handleCapture} onCancel={handleReset} />}
-          {state === 'style-selection' && <StyleSelector onSelect={handleStyleSelect} selectedStyle={selectedStyle} />}
-          {state === 'analyzing' && <AnalysisOverlay userImage={userImage} />}
-          {state === 'results' && analysis && selectedStyle && (
-            <ResultsView 
-              {...analysis} 
-              userImage={userImage} 
-              synthesizedImage={synthesizedImage}
-              onReset={handleReset}
-              style={selectedStyle}
-            />
+          {sharedTakeaway ? (
+            <TakeawayView {...sharedTakeaway} />
+          ) : (
+            <>
+              {state === 'welcome' && <Welcome onStart={handleStart} />}
+              {state === 'consent' && <Consent onAccept={handleConsent} onDecline={handleDecline} />}
+              {state === 'camera' && <CameraComponent onCapture={handleCapture} onCancel={handleReset} />}
+              {state === 'style-selection' && <StyleSelector onSelect={handleStyleSelect} selectedStyle={selectedStyle} />}
+              {state === 'analyzing' && <AnalysisOverlay userImage={userImage} />}
+              {state === 'results' && analysis && selectedStyle && (
+                <ResultsView 
+                  {...analysis} 
+                  userImage={userImage} 
+                  synthesizedImage={synthesizedImage}
+                  onReset={handleReset}
+                  style={selectedStyle}
+                />
+              )}
+            </>
           )}
 
           {error && (

@@ -37,3 +37,24 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-xero-navy/20;
 }
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  header,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main {
+    overflow: visible !important;
+  }
+
+  .takeaway-sheet {
+    box-shadow: none !important;
+    border: 1px solid #dce5ec !important;
+  }
+}
