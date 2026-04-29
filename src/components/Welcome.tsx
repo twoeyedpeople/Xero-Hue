@@ -44,7 +44,7 @@ export default function Welcome({ onStart }: WelcomeProps) {
           <div className="flex gap-4 text-[10px] font-mono uppercase tracking-widest opacity-40">
             <span>Scan.</span>
             <span className="text-xero-blue">Analyze.</span>
-            <span>Refine.</span>
+            <span>Style.</span>
           </div>
         </div>
       </motion.div>
