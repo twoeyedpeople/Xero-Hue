@@ -16,7 +16,7 @@ import {
 import { PALETTES } from '../constants';
 import { motion } from 'motion/react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { AlertCircle, ExternalLink, Link2, RefreshCw } from 'lucide-react';
+import { ExternalLink, Link2, RefreshCw } from 'lucide-react';
 import { SEASON_SUMMARIES } from '../seasonNarratives';
 import { buildTakeawayUrl, formatConfidence } from '../takeaway';
 
@@ -132,7 +132,6 @@ export default function ResultsView({
   secondary,
   contrast,
   evidence,
-  imageQualityIssues,
   confidence,
   reasoning,
   synthesizedImage,
@@ -150,7 +149,6 @@ export default function ResultsView({
   );
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
   const formattedConfidence = formatConfidence(confidence);
-  const hasQualityFlags = imageQualityIssues.trim().toLowerCase() !== 'none';
 
   const signalCards = [
     { label: 'Hue', value: hue },
@@ -237,7 +235,7 @@ export default function ResultsView({
             </div>
 
             <div className="grid gap-5">
-              <div className="bg-xero-blue text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl min-h-[148px]">
+              <div className="bg-xero-blue text-white rounded-3xl p-5 md:p-6 shadow-xl">
                 <div className="flex justify-between items-start gap-4">
                   <h3 className="text-[10px] font-mono uppercase text-white/70 font-bold tracking-[0.22em]">Analysis Precision</h3>
                   <span className="text-xl md:text-2xl font-black">{formattedConfidence}</span>
@@ -250,22 +248,10 @@ export default function ResultsView({
                     className="bg-white h-full shadow-[0_0_15px_white]"
                   />
                 </div>
-                <p className="text-xs md:text-sm leading-5 md:leading-6 text-white/80 mt-3 max-w-[28ch]">
+                <p className="text-sm md:text-[15px] leading-6 text-white/85 mt-4 max-w-[48ch]">
                   Confidence is now tied to image quality, axis clarity and decision-table fit.
                 </p>
               </div>
-
-              {hasQualityFlags && (
-                <div className="rounded-3xl bg-[#FFF7EC] border border-[#F2D3A1] p-5 shadow-xl">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-4 h-4 text-[#BE7A00] mt-0.5 shrink-0" />
-                    <div>
-                      <h4 className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#BE7A00] mb-2">Image Quality Notes</h4>
-                      <p className="text-sm leading-6 text-[#6F5732]">{imageQualityIssues}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
