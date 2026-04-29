@@ -11,7 +11,6 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { ExternalLink, Link2, RefreshCw } from 'lucide-react';
 import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
 import { buildTakeawayUrl, formatConfidence } from '../takeaway';
-import { SEASON_TITLE_ASSETS } from '../seasonTitleAssets';
 
 interface ResultsViewProps {
   season: Season;
@@ -46,7 +45,6 @@ export default function ResultsView({
   );
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
   const formattedConfidence = formatConfidence(confidence);
-  const seasonTitleAsset = SEASON_TITLE_ASSETS[season];
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(shareUrl);
@@ -140,26 +138,6 @@ export default function ResultsView({
              </p>
           </div>
         </div>
-
-        {seasonTitleAsset ? (
-          <div className="lg:grid lg:grid-cols-12 gap-5 hidden">
-            <div className="lg:col-start-9 lg:col-span-4 bg-white rounded-3xl p-4 border border-neutral-100 shadow-xl">
-              <div className="mb-3">
-                <h3 className="text-[10px] font-mono uppercase text-xero-blue font-black tracking-widest mb-2">
-                  Seasonal Signature
-                </h3>
-                <p className="text-sm text-neutral-500">Your palette family marker for quick recognition.</p>
-              </div>
-              <div className="rounded-[1.75rem] bg-[#F8FBFD] border border-neutral-100 flex items-center justify-center p-[60px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
-                <img
-                  src={seasonTitleAsset}
-                  alt={`${palette.title} seasonal title artwork`}
-                  className="w-full h-auto"
-                />
-              </div>
-            </div>
-          </div>
-        ) : null}
 
         {/* Technical Breakdown */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

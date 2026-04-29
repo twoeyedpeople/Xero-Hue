@@ -8,7 +8,6 @@ import { Download, Link as LinkIcon } from 'lucide-react';
 import { PALETTES } from '../constants';
 import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
 import { TakeawayPayload, buildTakeawayUrl, formatConfidence } from '../takeaway';
-import { SEASON_TITLE_ASSETS } from '../seasonTitleAssets';
 
 export default function TakeawayView({
   season,
@@ -21,7 +20,6 @@ export default function TakeawayView({
   const palette = PALETTES[season];
   const shareUrl = buildTakeawayUrl({ season, hue, value, chroma, style, confidence });
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
-  const seasonTitleAsset = SEASON_TITLE_ASSETS[season];
 
   const handleDownloadPdf = () => {
     window.print();
@@ -79,25 +77,6 @@ export default function TakeawayView({
               </div>
             ))}
           </div>
-
-          {seasonTitleAsset ? (
-            <div className="rounded-[1.75rem] border border-neutral-200 p-5 md:p-7">
-              <div className="mb-5">
-                <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-xero-blue font-bold mb-2">
-                  Seasonal Signature
-                </p>
-                <p className="text-sm text-neutral-500">A quick visual marker for your season family.</p>
-              </div>
-              <div className="min-h-[180px] md:min-h-[220px] rounded-[1.5rem] border border-neutral-100 bg-[#F8FBFD] flex items-center justify-center p-6 md:p-8 shadow-[0_18px_40px_rgba(0,43,73,0.08)]">
-                <img
-                  src={seasonTitleAsset}
-                  alt={`${palette.title} seasonal title artwork`}
-                  className="w-full max-w-[420px] h-auto"
-                />
-              </div>
-            </div>
-          ) : null}
-
           <div className="rounded-[1.75rem] border border-neutral-200 p-5 md:p-7">
             <div className="flex items-center justify-between gap-4 mb-6">
               <div>
