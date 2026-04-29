@@ -119,12 +119,6 @@ export default function ResultsView({
             <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
               {summary}
             </p>
-            <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-400 mt-5">
-              Source reference:{' '}
-              <a href={SEASON_SUMMARY_SOURCE} target="_blank" rel="noreferrer" className="text-xero-blue underline underline-offset-4">
-                The Concept Wardrobe
-              </a>
-            </p>
           </div>
           <div className="bg-xero-blue text-white rounded-3xl p-6 flex flex-col justify-between shadow-xl lg:col-span-4 min-h-[180px]">
              <div className="flex justify-between items-start gap-4">
