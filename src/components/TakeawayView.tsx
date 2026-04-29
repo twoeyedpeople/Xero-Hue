@@ -105,14 +105,6 @@ export default function TakeawayView({
               ))}
             </div>
           </div>
-
-          <p className="text-xs leading-6 text-neutral-500">
-            Season summary adapted from{' '}
-            <a href={SEASON_SUMMARY_SOURCE} className="text-xero-blue underline underline-offset-4">
-              The Concept Wardrobe Complete Seasonal Guides
-            </a>
-            .
-          </p>
         </div>
       </div>
     </div>
