@@ -11,19 +11,19 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="h-screen overflow-hidden bg-[#F4F7F9] text-xero-navy font-sans p-4 md:p-6 xl:p-8 flex flex-col gap-4 md:gap-5 selection:bg-xero-blue selection:text-white">
+    <div className="h-screen overflow-hidden bg-[#F4F7F9] text-xero-navy font-sans p-3 md:p-4 xl:p-6 flex flex-col gap-3 md:gap-4 selection:bg-xero-blue selection:text-white">
       {/* Header Section */}
-      <header className="flex justify-between items-end gap-4 border-b border-neutral-300 pb-5 md:pb-6">
+      <header className="flex justify-between items-end gap-4 border-b border-neutral-300 pb-3 md:pb-4">
         <div>
-          <h1 className="text-2xl md:text-3xl xl:text-4xl font-black tracking-tight text-xero-blue mb-2">Hue &amp; You</h1>
-          <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.18em] md:tracking-[0.2em] opacity-50">
+          <h1 className="text-xl md:text-2xl xl:text-3xl font-black tracking-tight text-xero-blue mb-1">Hue &amp; You</h1>
+          <p className="text-[8px] md:text-[9px] font-mono uppercase tracking-[0.16em] md:tracking-[0.18em] opacity-50">
             Professional Color Analysis Engine // London 2026
           </p>
         </div>
         <img
           src="/xero-wordmark-blue.png"
           alt="Xero"
-          className="h-7 md:h-8 xl:h-10 w-auto object-contain shrink-0"
+          className="h-4 md:h-5 xl:h-6 w-auto object-contain shrink-0"
         />
       </header>
 
@@ -32,7 +32,7 @@ export default function Layout({ children }: LayoutProps) {
       </main>
 
       {/* Footer Bar */}
-      <footer className="flex justify-between items-center text-[9px] font-mono uppercase tracking-widest border-t border-black pt-4">
+      <footer className="flex justify-between items-center text-[8px] md:text-[9px] font-mono uppercase tracking-widest border-t border-black pt-3">
         <div className="flex gap-4 md:gap-8">
           <span className="hidden xs:inline">Ref: THECONCEPTWARDROBE.COM</span>
           <span>System Status: Online</span>
