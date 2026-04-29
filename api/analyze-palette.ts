@@ -1,8 +1,22 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Season } from "../src/types";
+
+const SEASONS = [
+  'True (Warm) Spring',
+  'Light Spring',
+  'Bright Spring',
+  'True (Cool) Summer',
+  'Light Summer',
+  'Soft Summer',
+  'True (Warm) Autumn',
+  'Deep Autumn',
+  'Soft Autumn',
+  'True (Cool) Winter',
+  'Deep Winter',
+  'Bright Winter',
+] as const;
 
 interface PaletteAnalysisResult {
-  season: Season;
+  season: (typeof SEASONS)[number];
   hue: string;
   value: string;
   chroma: string;
@@ -36,7 +50,7 @@ export default async function handler(req: any, res: any) {
               text: `Analyze this person's physical characteristics (skin undertone, hair color, eye color, and overall contrast) to determine their best Color Season among the 12-season color analysis theory.
               
               Return the result in JSON format with the following fields:
-              - season: One of [${Object.values(Season).map(s => `"${s}"`).join(', ')}]
+              - season: One of [${SEASONS.map(s => `"${s}"`).join(', ')}]
               - hue: "Warm", "Cool", or "Neutral"
               - value: "Light", "Deep", or "Medium"
               - chroma: "Bright", "Muted", or "Clear"

@@ -3,8 +3,36 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 import { GoogleGenAI, Type } from '@google/genai';
-import { PALETTES } from './src/constants';
-import { Season } from './src/types';
+
+const SEASONS = [
+  'True (Warm) Spring',
+  'Light Spring',
+  'Bright Spring',
+  'True (Cool) Summer',
+  'Light Summer',
+  'Soft Summer',
+  'True (Warm) Autumn',
+  'Deep Autumn',
+  'Soft Autumn',
+  'True (Cool) Winter',
+  'Deep Winter',
+  'Bright Winter',
+] as const;
+
+const PALETTE_COLOR_NAMES: Record<string, string[]> = {
+  'True (Cool) Winter': ['Deep vivid blue', 'Deep raspberry', 'Bright scarlet', 'Medium cyan', 'Slate blue-grey', 'Light cool grey'],
+  'Deep Winter': ['Very deep navy', 'Deep teal-blue', 'Dark red/burgundy', 'Very deep green', 'Charcoal blue', 'Near-black'],
+  'Bright Winter': ['Bright cyan', 'Vivid azure', 'Bright magenta', 'Bright crimson', 'Bright kelly green', 'Strong golden yellow'],
+  'True (Warm) Autumn': ['Mustard yellow', 'Dark brown', 'Medium brown-orange', 'Deep brick red', 'Dark chocolate', 'Olive green'],
+  'Deep Autumn': ['Deep forest green', 'Deep plum/magenta', 'Brownish red', 'Very dark green', 'Muted brown', 'Dark olive'],
+  'Soft Autumn': ['Warm light beige', 'Pale warm grey', 'Muted khaki', 'Medium warm taupe', 'Warm marigold', 'Muted terracotta'],
+  'True (Cool) Summer': ['Pale cool periwinkle', 'Dusty blue-grey', 'Deep steel blue', 'Cool grey', 'Light dusty aqua', 'Light cool lavender'],
+  'Light Summer': ['Light baby blue', 'Light lavender', 'Very light pink', 'Pale mint grey', 'Muted straw', 'Warm light grey'],
+  'Soft Summer': ['Light cool grey', 'Warm grey', 'Medium cool grey', 'Dark cool grey', 'Muted denim blue', 'Very light warm grey'],
+  'True (Warm) Spring': ['Bright warm yellow', 'Light orange', 'Vivid orange', 'Bright yellow-green', 'Bright aqua', 'Vivid warm red-orange'],
+  'Bright Spring': ['Bright yellow', 'Strong orange', 'Vivid red', 'Bright green', 'Vivid teal', 'Bright cyan-blue'],
+  'Light Spring': ['Soft bright yellow', 'Light peach', 'Light warm cream', 'Very light aqua', 'Light sky blue', 'Soft coral'],
+};
 
 async function readJsonBody(req: NodeJS.ReadableStream) {
   const chunks: Buffer[] = [];
@@ -58,7 +86,7 @@ export default defineConfig(({mode}) => {
                           text: `Analyze this person's physical characteristics (skin undertone, hair color, eye color, and overall contrast) to determine their best Color Season among the 12-season color analysis theory.
                           
                           Return the result in JSON format with the following fields:
-                          - season: One of [${Object.values(Season).map(s => `"${s}"`).join(', ')}]
+                          - season: One of [${SEASONS.map(s => `"${s}"`).join(', ')}]
                           - hue: "Warm", "Cool", or "Neutral"
                           - value: "Light", "Deep", or "Medium"
                           - chroma: "Bright", "Muted", or "Clear"
@@ -109,8 +137,11 @@ export default defineConfig(({mode}) => {
                 if (!process.env.GEMINI_API_KEY) {
                   return sendJson(res, 500, { error: 'Missing GEMINI_API_KEY environment variable.' });
                 }
-                const palette = PALETTES[body.season as Season];
-                const colorList = palette.colors.map((color) => color.name).join(', ');
+                const paletteColors = PALETTE_COLOR_NAMES[body.season];
+                if (!paletteColors) {
+                  return sendJson(res, 400, { error: 'Unknown season.' });
+                }
+                const colorList = paletteColors.join(', ');
                 const prompt = `A professional, high-quality full-body portrait synthesis of the person in the provided image. 
                 They are wearing a stylish ${body.style} outfit that perfectly matches their ${body.season} color palette.
                 The clothing should feature colors like: ${colorList}.
