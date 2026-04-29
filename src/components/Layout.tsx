@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="w-2 h-2 rounded-full bg-green-600"></div>
           <div className="w-2 h-2 rounded-full bg-blue-600"></div>
         </div>
-        <span>&copy; 2026 Xerocon London</span>
+        <span>&copy; 2026 XeroCon London</span>
       </footer>
     </div>
   );

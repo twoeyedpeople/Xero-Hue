@@ -29,9 +29,13 @@ export default function Welcome({ onStart }: WelcomeProps) {
           <br />Self.
         </h2>
         
-        <p className="text-lg md:text-xl xl:text-2xl font-medium text-xero-navy/70 tracking-tight mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed">
-          Harnessing the pulse of Xerocon. Our AI analyzes your unique chromatic profile to synthesize the perfect wardrobe palette.
-        </p>
+        <div className="text-lg md:text-xl xl:text-2xl font-medium text-xero-navy/70 tracking-tight mb-10 md:mb-12 max-w-3xl mx-auto leading-relaxed space-y-4">
+          <p>Discover your perfect color palette with our advanced AI analysis.</p>
+          <p>
+            Take your photo and receive personalized color recommendations based on 12-season color theory.
+            Our AI analyzes your unique chromatic profile to synthesize the perfect wardrobe palette.
+          </p>
+        </div>
 
         <div className="flex flex-col items-center gap-6">
           <button 

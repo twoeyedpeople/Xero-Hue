@@ -18,6 +18,13 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
   const [isReady, setIsReady] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const captureTips = [
+    'Please align your face within the guide',
+    'Ensure your face is clearly visible',
+    'Remove sunglasses or hats',
+    'Only one person in the photo',
+    'Artificial intelligence works best with neutral expressions and direct gaze',
+  ];
 
   useEffect(() => {
     async function startCamera() {
@@ -113,10 +120,15 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
       <section className="xl:col-span-4 flex flex-col gap-6">
         <div className="bg-white rounded-2xl p-8 flex-1 flex flex-col justify-center border border-neutral-200">
           <h3 className="text-[10px] font-mono uppercase mb-4 opacity-40">Status: Calibration Stable</h3>
-          <h2 className="text-4xl font-black text-xero-navy uppercase leading-tight mb-4 tracking-tighter">Perfect Frame</h2>
-          <p className="text-sm font-medium text-neutral-500 mb-10 leading-relaxed">
-            Please align your face within the guide. Artificial intelligence works best with neutral expressions and direct gaze.
-          </p>
+          <h2 className="text-4xl font-black text-xero-navy uppercase leading-tight mb-4 tracking-tighter">For Best Results</h2>
+          <div className="mb-10 space-y-3">
+            {captureTips.map((tip) => (
+              <div key={tip} className="flex items-start gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-xero-blue shrink-0" />
+                <p className="text-sm font-medium text-neutral-500 leading-relaxed">{tip}</p>
+              </div>
+            ))}
+          </div>
 
           <div className="space-y-4">
             <button 
