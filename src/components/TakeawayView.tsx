@@ -43,13 +43,6 @@ export default function TakeawayView({
               <h1 className="text-4xl md:text-6xl font-black tracking-tight text-xero-navy uppercase leading-none mb-4">
                 {palette.title}
               </h1>
-              {seasonTitleAsset ? (
-                <img
-                  src={seasonTitleAsset}
-                  alt={`${palette.title} seasonal title artwork`}
-                  className="h-12 md:h-14 w-auto mb-5"
-                />
-              ) : null}
               <p className="text-base md:text-lg leading-8 text-neutral-600">{summary}</p>
             </div>
 
@@ -86,6 +79,24 @@ export default function TakeawayView({
               </div>
             ))}
           </div>
+
+          {seasonTitleAsset ? (
+            <div className="rounded-[1.75rem] border border-neutral-200 p-5 md:p-7">
+              <div className="mb-5">
+                <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-xero-blue font-bold mb-2">
+                  Seasonal Signature
+                </p>
+                <p className="text-sm text-neutral-500">A quick visual marker for your season family.</p>
+              </div>
+              <div className="min-h-[180px] md:min-h-[220px] rounded-[1.5rem] border border-neutral-100 bg-[#F8FBFD] flex items-center justify-center p-6 md:p-8 shadow-[0_18px_40px_rgba(0,43,73,0.08)]">
+                <img
+                  src={seasonTitleAsset}
+                  alt={`${palette.title} seasonal title artwork`}
+                  className="w-full max-w-[420px] h-auto"
+                />
+              </div>
+            </div>
+          ) : null}
 
           <div className="rounded-[1.75rem] border border-neutral-200 p-5 md:p-7">
             <div className="flex items-center justify-between gap-4 mb-6">

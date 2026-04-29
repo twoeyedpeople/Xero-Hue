@@ -118,23 +118,16 @@ export default function ResultsView({
           <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl lg:col-span-8">
             <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Identified Persona</h3>
             <h2 className="text-4xl md:text-5xl lg:text-[3.4rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">{palette.title}</h2>
-            {seasonTitleAsset ? (
-              <img
-                src={seasonTitleAsset}
-                alt={`${palette.title} seasonal title artwork`}
-                className="h-12 md:h-14 w-auto mb-5"
-              />
-            ) : null}
             <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
               {summary}
             </p>
           </div>
-          <div className="bg-xero-blue text-white rounded-3xl p-6 flex flex-col justify-between shadow-xl lg:col-span-4 min-h-[180px]">
+          <div className="bg-xero-blue text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl lg:col-span-4 min-h-[150px]">
              <div className="flex justify-between items-start gap-4">
                 <h3 className="text-[10px] font-mono uppercase text-white/70 font-bold tracking-[0.22em]">Analysis Precision</h3>
-                <span className="text-2xl md:text-3xl font-black">{formattedConfidence}</span>
+                <span className="text-xl md:text-2xl font-black">{formattedConfidence}</span>
              </div>
-             <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden mt-4">
+             <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden mt-3">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: formattedConfidence }}
@@ -142,11 +135,31 @@ export default function ResultsView({
                   className="bg-white h-full shadow-[0_0_15px_white]"
                 />
              </div>
-             <p className="text-sm leading-6 text-white/80 mt-4">
+             <p className="text-xs md:text-sm leading-5 md:leading-6 text-white/80 mt-3 max-w-[24ch]">
                High-confidence match across hue, value and chroma signals from your captured profile.
              </p>
           </div>
         </div>
+
+        {seasonTitleAsset ? (
+          <div className="bg-white rounded-3xl p-6 md:p-7 border border-neutral-100 shadow-xl">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div>
+                <h3 className="text-[10px] font-mono uppercase text-xero-blue font-black tracking-widest mb-2">
+                  Seasonal Signature
+                </h3>
+                <p className="text-sm text-neutral-500">Your palette family marker for quick recognition.</p>
+              </div>
+            </div>
+            <div className="min-h-[190px] md:min-h-[220px] rounded-[1.75rem] bg-[#F8FBFD] border border-neutral-100 flex items-center justify-center p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
+              <img
+                src={seasonTitleAsset}
+                alt={`${palette.title} seasonal title artwork`}
+                className="w-full max-w-[440px] h-auto"
+              />
+            </div>
+          </div>
+        ) : null}
 
         {/* Technical Breakdown */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
