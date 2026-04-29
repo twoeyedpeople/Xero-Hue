@@ -11,6 +11,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { ExternalLink, Link2, RefreshCw } from 'lucide-react';
 import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
 import { buildTakeawayUrl, formatConfidence } from '../takeaway';
+import { SEASON_TITLE_ASSETS } from '../seasonTitleAssets';
 
 interface ResultsViewProps {
   season: Season;
@@ -45,6 +46,7 @@ export default function ResultsView({
   );
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
   const formattedConfidence = formatConfidence(confidence);
+  const seasonTitleAsset = SEASON_TITLE_ASSETS[season];
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(shareUrl);
@@ -116,6 +118,13 @@ export default function ResultsView({
           <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl lg:col-span-8">
             <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Identified Persona</h3>
             <h2 className="text-4xl md:text-5xl lg:text-[3.4rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">{palette.title}</h2>
+            {seasonTitleAsset ? (
+              <img
+                src={seasonTitleAsset}
+                alt={`${palette.title} seasonal title artwork`}
+                className="h-12 md:h-14 w-auto mb-5"
+              />
+            ) : null}
             <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
               {summary}
             </p>

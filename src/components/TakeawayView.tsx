@@ -8,6 +8,7 @@ import { Download, Link as LinkIcon } from 'lucide-react';
 import { PALETTES } from '../constants';
 import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
 import { TakeawayPayload, buildTakeawayUrl, formatConfidence } from '../takeaway';
+import { SEASON_TITLE_ASSETS } from '../seasonTitleAssets';
 
 export default function TakeawayView({
   season,
@@ -20,6 +21,7 @@ export default function TakeawayView({
   const palette = PALETTES[season];
   const shareUrl = buildTakeawayUrl({ season, hue, value, chroma, style, confidence });
   const summary = SEASON_SUMMARIES[season] ?? palette.description;
+  const seasonTitleAsset = SEASON_TITLE_ASSETS[season];
 
   const handleDownloadPdf = () => {
     window.print();
@@ -41,6 +43,13 @@ export default function TakeawayView({
               <h1 className="text-4xl md:text-6xl font-black tracking-tight text-xero-navy uppercase leading-none mb-4">
                 {palette.title}
               </h1>
+              {seasonTitleAsset ? (
+                <img
+                  src={seasonTitleAsset}
+                  alt={`${palette.title} seasonal title artwork`}
+                  className="h-12 md:h-14 w-auto mb-5"
+                />
+              ) : null}
               <p className="text-base md:text-lg leading-8 text-neutral-600">{summary}</p>
             </div>
 
