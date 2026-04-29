@@ -1,4 +1,14 @@
-import { analyzePaletteFromImage } from "./_lib/geminiApi";
+import { GoogleGenAI, Type } from "@google/genai";
+import { Season } from "../src/types";
+
+interface PaletteAnalysisResult {
+  season: Season;
+  hue: string;
+  value: string;
+  chroma: string;
+  confidence: number;
+  reasoning: string;
+}
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
@@ -11,7 +21,57 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Missing image64 payload." });
     }
 
-    const result = await analyzePaletteFromImage(image64);
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: "Missing GEMINI_API_KEY environment variable." });
+    }
+
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: [
+        {
+          parts: [
+            {
+              text: `Analyze this person's physical characteristics (skin undertone, hair color, eye color, and overall contrast) to determine their best Color Season among the 12-season color analysis theory.
+              
+              Return the result in JSON format with the following fields:
+              - season: One of [${Object.values(Season).map(s => `"${s}"`).join(', ')}]
+              - hue: "Warm", "Cool", or "Neutral"
+              - value: "Light", "Deep", or "Medium"
+              - chroma: "Bright", "Muted", or "Clear"
+              - confidence: A number between 0 and 1
+              - reasoning: A brief 1-sentence explanation of the findings.
+              
+              Focus on the scientific attributes of the facial features.`,
+            },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: image64.split(",")[1] || image64,
+              },
+            },
+          ],
+        },
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            season: { type: Type.STRING },
+            hue: { type: Type.STRING },
+            value: { type: Type.STRING },
+            chroma: { type: Type.STRING },
+            confidence: { type: Type.NUMBER },
+            reasoning: { type: Type.STRING },
+          },
+          required: ["season", "hue", "value", "chroma", "confidence", "reasoning"],
+        },
+      },
+    });
+
+    const result = JSON.parse(response.text) as PaletteAnalysisResult;
     return res.status(200).json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Analysis failed.";

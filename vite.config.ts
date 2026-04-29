@@ -2,7 +2,9 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
-import { analyzePaletteFromImage, generateImageFromPalette } from './api/_lib/geminiApi';
+import { GoogleGenAI, Type } from '@google/genai';
+import { PALETTES } from './src/constants';
+import { Season } from './src/types';
 
 async function readJsonBody(req: NodeJS.ReadableStream) {
   const chunks: Buffer[] = [];
@@ -43,7 +45,54 @@ export default defineConfig(({mode}) => {
                 if (typeof body.image64 !== 'string' || !body.image64) {
                   return sendJson(res, 400, { error: 'Missing image64 payload.' });
                 }
-                const result = await analyzePaletteFromImage(body.image64);
+                if (!process.env.GEMINI_API_KEY) {
+                  return sendJson(res, 500, { error: 'Missing GEMINI_API_KEY environment variable.' });
+                }
+                const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+                const response = await ai.models.generateContent({
+                  model: 'gemini-3-flash-preview',
+                  contents: [
+                    {
+                      parts: [
+                        {
+                          text: `Analyze this person's physical characteristics (skin undertone, hair color, eye color, and overall contrast) to determine their best Color Season among the 12-season color analysis theory.
+                          
+                          Return the result in JSON format with the following fields:
+                          - season: One of [${Object.values(Season).map(s => `"${s}"`).join(', ')}]
+                          - hue: "Warm", "Cool", or "Neutral"
+                          - value: "Light", "Deep", or "Medium"
+                          - chroma: "Bright", "Muted", or "Clear"
+                          - confidence: A number between 0 and 1
+                          - reasoning: A brief 1-sentence explanation of the findings.
+                          
+                          Focus on the scientific attributes of the facial features.`,
+                        },
+                        {
+                          inlineData: {
+                            mimeType: 'image/jpeg',
+                            data: body.image64.split(',')[1] || body.image64,
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                  config: {
+                    responseMimeType: 'application/json',
+                    responseSchema: {
+                      type: Type.OBJECT,
+                      properties: {
+                        season: { type: Type.STRING },
+                        hue: { type: Type.STRING },
+                        value: { type: Type.STRING },
+                        chroma: { type: Type.STRING },
+                        confidence: { type: Type.NUMBER },
+                        reasoning: { type: Type.STRING },
+                      },
+                      required: ['season', 'hue', 'value', 'chroma', 'confidence', 'reasoning'],
+                    },
+                  },
+                });
+                const result = JSON.parse(response.text);
                 return sendJson(res, 200, result);
               }
 
@@ -57,7 +106,45 @@ export default defineConfig(({mode}) => {
                 if (typeof body.style !== 'string' || !body.style) {
                   return sendJson(res, 400, { error: 'Missing style.' });
                 }
-                const image = await generateImageFromPalette(body.image64, body.season as any, body.style as any);
+                if (!process.env.GEMINI_API_KEY) {
+                  return sendJson(res, 500, { error: 'Missing GEMINI_API_KEY environment variable.' });
+                }
+                const palette = PALETTES[body.season as Season];
+                const colorList = palette.colors.map((color) => color.name).join(', ');
+                const prompt = `A professional, high-quality full-body portrait synthesis of the person in the provided image. 
+                They are wearing a stylish ${body.style} outfit that perfectly matches their ${body.season} color palette.
+                The clothing should feature colors like: ${colorList}.
+                The setting is a modern, high-end professional environment.
+                The image should look like a professional studio portrait with soft lighting.
+                Maintain the facial features and identity of the person from the original image.
+                The overall aesthetic should be polished, expensive, and sophisticated.`;
+                const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+                const response = await ai.models.generateContent({
+                  model: 'gemini-2.5-flash-image',
+                  contents: [
+                    {
+                      parts: [
+                        { text: prompt },
+                        {
+                          inlineData: {
+                            mimeType: 'image/jpeg',
+                            data: body.image64.split(',')[1] || body.image64,
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                });
+                let image = '';
+                for (const part of response.candidates?.[0]?.content?.parts || []) {
+                  if (part.inlineData?.data) {
+                    image = `data:image/png;base64,${part.inlineData.data}`;
+                    break;
+                  }
+                }
+                if (!image) {
+                  return sendJson(res, 500, { error: 'Image generation failed' });
+                }
                 return sendJson(res, 200, { image });
               }
             } catch (error) {
