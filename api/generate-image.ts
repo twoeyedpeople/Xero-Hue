@@ -42,13 +42,45 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Unknown season." });
     }
     const colorList = paletteColors.join(", ");
-    const prompt = `A professional, high-quality full-body portrait synthesis of the person in the provided image. 
-    They are wearing a stylish ${style} outfit that perfectly matches their ${season} color palette.
-    The clothing should feature colors like: ${colorList}.
-    The setting is a modern, high-end professional environment.
-    The image should look like a professional studio portrait with soft lighting.
-    Maintain the facial features and identity of the person from the original image.
-    The overall aesthetic should be polished, expensive, and sophisticated.`;
+    const prompt = `Editorial full-body fashion portrait of the person in the provided image.
+Preserve their identity exactly - same face, bone structure, skin tone, eye
+color, hairline, body type, and proportions. Photorealistic skin with
+visible texture, pores, fine peach fuzz, and individual hair strands. No
+retouched plastic finish, no AI smoothing.
+
+The subject is wearing a contemporary ${style} outfit with a 2026 editorial
+sensibility: modern silhouettes, considered proportions, intentional
+layering, and tactile material detail - visible fabric weave, natural
+drape, real shadows in the folds, believable shoes and accessories. Styling
+should feel pulled from a current fashion magazine, not a stock catalog or
+costume rental.
+
+Color direction is locked to the ${season} palette: ${colorList}. Every
+visible garment and accessory must sit inside this palette - no
+off-palette colors anywhere in the wardrobe. Use the palette confidently:
+a dominant hero color, a supporting tone, and an accent.
+
+Background is tonally complementary but quiet: a sunlit minimalist
+interior, a soft architectural exterior, a textured plaster or concrete
+wall, or a clean seamless gradient. It should feel current and gallery-like
+- never a generic office, hotel lobby, or stock "professional environment."
+
+Camera: shot on a full-frame body with an 85mm prime at f/2.0. Shallow
+depth of field, tack-sharp focus on the face, gentle background falloff.
+Lighting is directional and cinematic with a subtle rim separating the
+subject from the background - not flat studio fill. Slight film grain.
+
+Pose is relaxed and candid: weight on one leg, hands placed naturally,
+shoulders not squared to camera, an unforced confident expression. Avoid
+catalog stiffness and forced symmetry.
+
+Overall aesthetic: high-end fashion editorial - Vogue, SSENSE, Net-a-Porter,
+Zara campaign quality. Modern, striking, hyper-realistic.
+
+Avoid: dated or costume-y styling, plastic AI skin, glossy over-retouched
+faces, overly symmetrical poses, blurred or warped hands, generic corporate
+backdrops, low-contrast flat lighting, fabric without texture, off-palette
+colors.`;
 
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({

@@ -9,7 +9,7 @@ import { PALETTES } from '../constants';
 import { motion } from 'motion/react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { ExternalLink, Link2, RefreshCw } from 'lucide-react';
-import { SEASON_SUMMARIES, SEASON_SUMMARY_SOURCE } from '../seasonNarratives';
+import { SEASON_SUMMARIES } from '../seasonNarratives';
 import { buildTakeawayUrl, formatConfidence } from '../takeaway';
 
 interface ResultsViewProps {
@@ -60,7 +60,7 @@ export default function ResultsView({
       <section className="md:col-span-5 flex flex-col gap-5 md:gap-6">
         <div className="bg-white rounded-[2rem] relative aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-100 group">
           <div className="absolute bottom-6 left-6 z-20 bg-xero-navy/85 backdrop-blur-md text-white px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/10">
-            Wardrobe Synthesis // {style}
+            Editorial Look // {style}
           </div>
           {synthesizedImage ? (
             <motion.img 
@@ -114,7 +114,7 @@ export default function ResultsView({
         {/* Result Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           <div className="bg-white rounded-3xl p-7 md:p-8 border border-neutral-100 shadow-xl lg:col-span-8">
-            <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Identified Persona</h3>
+            <h3 className="text-[10px] font-mono uppercase mb-4 text-xero-blue font-bold tracking-widest">Seasonal Result</h3>
             <h2 className="text-4xl md:text-5xl lg:text-[3.4rem] font-black text-xero-navy uppercase leading-none tracking-tighter mb-4">{palette.title}</h2>
             <p className="text-sm md:text-[15px] font-medium text-neutral-600 leading-7">
               {summary}
