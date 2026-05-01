@@ -379,8 +379,9 @@ The subject is dressed in a contemporary ${body.style} outfit — the kind of
 real, wearable clothing a stylish person would actually own and put on
 in 2026. Think elevated everyday: well-fitted basics, modern but
 familiar silhouettes, quality fabrics, considered but unfussy styling.
-Reference register: Uniqlo, COS, Aritzia, Everlane, J.Crew, Reformation,
-Buck Mason, Norse Projects — premium high-street, not high fashion.
+Reference register: Farfetch product styling, COS, Aritzia, Everlane,
+J.Crew, Reformation, Buck Mason, Norse Projects — premium retail,
+wearable designer and elevated high-street, not runway or costume.
 The clothes should look bought off the rack, not styled by an editor.
 Visible fabric texture (knit weave, denim grain, cotton drape, soft
 brushed jersey) and natural folds where the garment hangs.

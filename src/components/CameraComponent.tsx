@@ -23,7 +23,6 @@ export default function CameraComponent({ onCapture, onCancel }: CameraComponent
   const captureTips = [
     'Please align your face within the guide',
     'Ensure your face is clearly visible',
-    'Remove sunglasses or hats',
     'Only one person in the photo',
     'Artificial intelligence works best with neutral expressions and direct gaze',
   ];

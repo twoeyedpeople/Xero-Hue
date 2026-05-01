@@ -23,10 +23,10 @@ export default function Welcome({ onStart }: WelcomeProps) {
           London 2026
         </div>
         
-        <h2 className="text-4xl md:text-6xl xl:text-[6.8rem] font-black text-xero-navy tracking-tighter leading-[0.9] md:leading-[0.86] mb-4 md:mb-5">
-          Meet Your<br />
-          <span className="text-xero-blue italic font-serif lowercase tracking-normal">Best</span>
-          <br />Self.
+        <h2 className="text-4xl md:text-6xl xl:text-[6rem] font-black text-xero-navy tracking-tighter leading-[0.92] md:leading-[0.9] mb-4 md:mb-5">
+          Discover your perfect
+          <br />
+          <span className="text-xero-blue">colour palette</span>
         </h2>
         
         <div className="text-base md:text-lg xl:text-xl font-medium text-xero-navy/70 tracking-tight mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed space-y-2.5">
