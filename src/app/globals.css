@@ -549,22 +549,22 @@ a {
 .download-panel {
   width: min(560px, 100%);
   display: grid;
-  gap: 18px;
+  gap: 22px;
   justify-items: center;
   color: var(--ink);
   text-align: center;
 }
 
 .download-brand {
-  font-size: 1.1rem;
-  font-weight: 950;
-  color: var(--cyan-2);
-  text-transform: uppercase;
+  width: min(132px, 34vw);
+  height: auto;
+  margin-bottom: 10px;
 }
 
 .download-preview {
   width: 100%;
   overflow: hidden;
+  border-radius: 16px;
   background: var(--white);
   box-shadow: 0 24px 80px rgba(0, 18, 34, 0.28);
 }
@@ -575,8 +575,7 @@ a {
   height: auto;
 }
 
-.download-panel .primary-action,
-.download-panel .secondary-link {
+.download-panel .primary-action {
   width: min(320px, 100%);
 }
 
