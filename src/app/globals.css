@@ -420,6 +420,26 @@ a {
   box-shadow: 0 16px 38px rgba(0, 18, 34, 0.34);
 }
 
+.qr-loading {
+  width: min(270px, 70vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: var(--white);
+  box-shadow: 0 16px 38px rgba(0, 18, 34, 0.34);
+}
+
+.qr-loading::after {
+  content: "";
+  width: 42px;
+  height: 42px;
+  border: 4px solid rgba(6, 47, 72, 0.14);
+  border-top-color: var(--cyan);
+  border-radius: 999px;
+  animation: loader-spin 800ms linear infinite;
+}
+
 .qr-copy,
 .qr-warning {
   margin: 0;

@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
   if (hasBlobStorage()) {
     const blob = await put(pathname, buffer, {
-      access: "public",
+      access: "private",
       addRandomSuffix: false,
       allowOverwrite: false,
       cacheControlMaxAge: 60 * 60 * 24 * 7,

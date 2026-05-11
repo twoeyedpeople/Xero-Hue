@@ -20,7 +20,7 @@ export async function GET(request: Request, context: RouteContext) {
   const disposition = new URL(request.url).searchParams.get("download") === "1" ? "attachment" : "inline";
 
   if (hasBlobStorage()) {
-    const result = await get(`reports/${id}.png`, { access: "public" });
+    const result = await get(`reports/${id}.png`, { access: "private" });
 
     if (!result || result.statusCode !== 200 || !result.stream) {
       return notFound();

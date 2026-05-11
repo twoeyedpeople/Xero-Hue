@@ -14,10 +14,11 @@ type ReportUploadResponse = {
 };
 
 type QrOverlayState = {
-  qrDataUrl: string;
-  downloadPageUrl: string;
-  imageUrl: string;
-  storage: "blob" | "memory";
+  status: "loading" | "ready";
+  qrDataUrl?: string;
+  downloadPageUrl?: string;
+  imageUrl?: string;
+  storage?: "blob" | "memory";
 };
 
 type ConsentModalState = "closed" | "entering" | "exiting";
@@ -623,6 +624,7 @@ export function HueExperience() {
 
     setIsSaving(true);
     setError(null);
+    setQrOverlay({ status: "loading" });
 
     try {
       const response = await fetch("/api/reports", {
@@ -654,12 +656,14 @@ export function HueExperience() {
       });
 
       setQrOverlay({
+        status: "ready",
         qrDataUrl,
         downloadPageUrl: report.downloadPageUrl,
         imageUrl: report.imageUrl,
         storage: report.storage,
       });
     } catch (saveError) {
+      setQrOverlay(null);
       setError(saveError instanceof Error ? saveError.message : "Could not create the QR code.");
     } finally {
       setIsSaving(false);
@@ -748,14 +752,20 @@ export function HueExperience() {
               <p id="qr-title" className="qr-kicker">
                 KEEP IT FOREVER
               </p>
-              <a className="qr-link" href={qrOverlay.imageUrl} target="_blank" rel="noreferrer" aria-label="Open report image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="qr-image" src={qrOverlay.qrDataUrl} alt="QR code to download your Hue report" />
-              </a>
+              {qrOverlay.status === "loading" ? (
+                <div className="qr-loading" aria-label="Preparing QR code" />
+              ) : (
+                <a className="qr-link" href={qrOverlay.imageUrl} target="_blank" rel="noreferrer" aria-label="Open report image">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="qr-image" src={qrOverlay.qrDataUrl} alt="QR code to download your Hue report" />
+                </a>
+              )}
               <p className="qr-copy">
-                Scan the QR code and save the image straight to your phone.
+                {qrOverlay.status === "loading"
+                  ? "Preparing your report for download."
+                  : "Scan the QR code and save the image straight to your phone."}
               </p>
-              {qrOverlay.storage === "memory" ? (
+              {qrOverlay.status === "ready" && qrOverlay.storage === "memory" ? (
                 <p className="qr-warning">Local preview mode: cross-device download needs Vercel Blob configured.</p>
               ) : null}
               <div className="qr-actions">
@@ -796,7 +806,7 @@ export function HueExperience() {
             disabled={isAnalysing || isSaving}
           >
             <Download size={16} />
-            {isSaving ? "Preparing QR" : "Save your report"}
+            Save your report
           </button>
         ) : null}
       </footer>
