@@ -1,6 +1,0 @@
-{
-  "name": "Hue & You: AI Color Concierge",
-  "description": "Professional 12-season color analysis and wardrobe synthesis engine for Xerocon Brisbane 2026.",
-  "requestFramePermissions": ["camera"],
-  "majorCapabilities": ["Vision Analysis", "Image Synthesis"]
-}
