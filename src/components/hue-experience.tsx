@@ -788,11 +788,11 @@ export function HueExperience() {
         {!analysisComplete ? (
           <p className="footer-legal">
             For more information, please visit Xero&apos;s{" "}
-            <a href="https://www.xero.com" target="_blank" rel="noreferrer">
+            <a href="https://www.xero.com/sg/legal/privacy/" target="_blank" rel="noreferrer">
               Privacy Policy
             </a>{" "}
             and{" "}
-            <a href="https://www.xero.com" target="_blank" rel="noreferrer">
+            <a href="https://www.xero.com/sg/legal/terms/" target="_blank" rel="noreferrer">
               Terms &amp; Conditions
             </a>
             .

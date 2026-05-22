@@ -19,6 +19,7 @@ const RIVE_STATE_MACHINE = "State Machine 1";
 const RIVE_VIEW_MODEL = "MainView";
 const RIVE_VIEW_MODEL_INSTANCE = "Instance";
 const REVEAL_DELAY_MS = 500;
+const preservedCanvasContexts = new WeakSet<HTMLCanvasElement>();
 
 export type RiveEvidence = {
   skin: string;
@@ -72,6 +73,29 @@ function getLayoutScaleFactor(): number {
 
 function getRiveSource(): string {
   return process.env.NODE_ENV === "development" ? `/rive/xerocon.riv?v=${Date.now()}` : "/rive/xerocon.riv";
+}
+
+function preserveWebglDrawingBuffer(canvas: HTMLCanvasElement): void {
+  if (preservedCanvasContexts.has(canvas)) {
+    return;
+  }
+
+  const getContext = canvas.getContext.bind(canvas);
+
+  canvas.getContext = ((contextId: string, options?: unknown) => {
+    if (contextId === "webgl" || contextId === "webgl2") {
+      const nextOptions = {
+        ...(typeof options === "object" && options ? options : {}),
+        preserveDrawingBuffer: true,
+      };
+
+      return getContext(contextId as never, nextOptions as never);
+    }
+
+    return getContext(contextId as never, options as never);
+  }) as HTMLCanvasElement["getContext"];
+
+  preservedCanvasContexts.add(canvas);
 }
 
 export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function RiveStage(
@@ -284,6 +308,8 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
         return;
       }
 
+      preserveWebglDrawingBuffer(canvas);
+
       const api = apiRef.current ?? normaliseRiveModule(await import("@rive-app/webgl2"));
 
       if (cancelled) {
@@ -391,10 +417,14 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
     () => ({
       captureFrame: () => {
         const canvas = canvasRef.current;
+        const rive = riveRef.current;
 
         if (!canvas) {
           return null;
         }
+
+        rive?.drawFrame();
+        canvas.getContext("webgl2")?.finish();
 
         return canvas.toDataURL("image/png");
       },
