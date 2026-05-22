@@ -9,10 +9,10 @@ import {
   useState,
 } from "react";
 
-type RiveApi = typeof import("@rive-app/canvas");
+type RiveApi = typeof import("@rive-app/webgl2");
 type RiveInstance = InstanceType<RiveApi["Rive"]>;
-type ViewModelInstance = import("@rive-app/canvas").ViewModelInstance;
-type ViewModelInstanceValue = import("@rive-app/canvas").ViewModelInstanceValue;
+type ViewModelInstance = import("@rive-app/webgl2").ViewModelInstance;
+type ViewModelInstanceValue = import("@rive-app/webgl2").ViewModelInstanceValue;
 
 const RIVE_ARTBOARD = "HomeComponent";
 const RIVE_STATE_MACHINE = "State Machine 1";
@@ -284,7 +284,7 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
         return;
       }
 
-      const api = apiRef.current ?? normaliseRiveModule(await import("@rive-app/canvas"));
+      const api = apiRef.current ?? normaliseRiveModule(await import("@rive-app/webgl2"));
 
       if (cancelled) {
         return;

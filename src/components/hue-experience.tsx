@@ -28,8 +28,8 @@ const CONSENT_OPEN_DELAY_MS = 300;
 const CAPTURE_ASPECT_RATIO = 3 / 4;
 const CAPTURE_WIDTH = 960;
 const CAPTURE_HEIGHT = 1280;
-const GENERATED_IMAGE_WIDTH = 1520;
-const GENERATED_IMAGE_HEIGHT = 2688;
+const GENERATED_IMAGE_WIDTH = 1536;
+const GENERATED_IMAGE_HEIGHT = 2048;
 const ANALYSIS_RETRY_DELAY_MS = 900;
 const PHOTO_CAPTURE_DELAY_MS = 3000;
 const PROGRESS_TWEEN_MS = 650;
@@ -129,19 +129,6 @@ async function normalizeImageForRive(
     throw new Error("Generated image has no readable dimensions.");
   }
 
-  const targetAspectRatio = width / height;
-  const sourceAspectRatio = sourceWidth / sourceHeight;
-  let cropWidth = sourceWidth;
-  let cropHeight = sourceHeight;
-
-  if (sourceAspectRatio > targetAspectRatio) {
-    cropWidth = sourceHeight * targetAspectRatio;
-  } else {
-    cropHeight = sourceWidth / targetAspectRatio;
-  }
-
-  const cropX = (sourceWidth - cropWidth) / 2;
-  const cropY = (sourceHeight - cropHeight) / 2;
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -154,7 +141,16 @@ async function normalizeImageForRive(
 
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = "high";
-  context.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, width, height);
+  context.fillStyle = "#FFFFFF";
+  context.fillRect(0, 0, width, height);
+
+  const scale = Math.min(width / sourceWidth, height / sourceHeight);
+  const drawWidth = sourceWidth * scale;
+  const drawHeight = sourceHeight * scale;
+  const drawX = (width - drawWidth) / 2;
+  const drawY = (height - drawHeight) / 2;
+
+  context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
 
   return {
     dataUrl: canvas.toDataURL(mimeType, 0.94),
@@ -352,7 +348,7 @@ export function HueExperience() {
 
   const handleConsentConfirm = useCallback(() => {
     if (!consentChecked) {
-      setError("Consent is required before camera activation begins.");
+      setError("Please acknowledge the privacy terms before continuing.");
       return;
     }
 
@@ -712,7 +708,7 @@ export function HueExperience() {
               <h1 id="consent-title">PRIVACY &amp; CONSENT</h1>
               <p className="consent-intro">Before we begin, please review and confirm the agreements below.</p>
               <ol className="consent-list">
-                <li>We use your device camera to capture one photo for analysis.</li>
+                <li>We use a camera to capture one photo for analysis.</li>
                 <li>Your photo is processed in real time to determine your palette.</li>
                 <li>Photos are not permanently stored and are deleted after your session ends.</li>
                 <li>No personal data such as name or email is collected or shared.</li>
@@ -729,7 +725,11 @@ export function HueExperience() {
                 </span>
                 <span>
                   <strong>I understand and agree to the processing of my image</strong>
-                  <small>Consent is required before camera activation begins.</small>
+                  <small>
+                    Xero will collect and use your photo solely for the purpose of providing your color palette. For more
+                    information on how Xero processes your personal data, please see our Privacy Notice. By clicking continue
+                    below, you acknowledge and agree to these terms.
+                  </small>
                 </span>
               </label>
               <div className="consent-actions">
