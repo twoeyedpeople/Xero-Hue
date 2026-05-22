@@ -30,6 +30,9 @@ const CAPTURE_WIDTH = 960;
 const CAPTURE_HEIGHT = 1280;
 const GENERATED_IMAGE_WIDTH = 1536;
 const GENERATED_IMAGE_HEIGHT = 2048;
+const REPORT_UPLOAD_MAX_WIDTH = 1620;
+const REPORT_UPLOAD_MAX_HEIGHT = 2160;
+const REPORT_UPLOAD_TARGET_BYTES = 3_400_000;
 const ANALYSIS_RETRY_DELAY_MS = 900;
 const PHOTO_CAPTURE_DELAY_MS = 3000;
 const PROGRESS_TWEEN_MS = 650;
@@ -160,6 +163,60 @@ async function normalizeImageForRive(
     width,
     height,
   };
+}
+
+async function encodeReportFrameForUpload(dataUrl: string): Promise<string> {
+  const image = await loadDataUrlImage(dataUrl);
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
+
+  if (!sourceWidth || !sourceHeight) {
+    throw new Error("Report image has no readable dimensions.");
+  }
+
+  const scale = Math.min(1, REPORT_UPLOAD_MAX_WIDTH / sourceWidth, REPORT_UPLOAD_MAX_HEIGHT / sourceHeight);
+  const width = Math.max(1, Math.round(sourceWidth * scale));
+  const height = Math.max(1, Math.round(sourceHeight * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    throw new Error("Could not create a report export canvas.");
+  }
+
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.fillStyle = "#FFFFFF";
+  context.fillRect(0, 0, width, height);
+  context.drawImage(image, 0, 0, width, height);
+
+  const qualities = [0.9, 0.82, 0.74, 0.66];
+  let encoded = canvas.toDataURL("image/jpeg", qualities[0]);
+  let quality = qualities[0];
+
+  for (const nextQuality of qualities) {
+    const nextEncoded = canvas.toDataURL("image/jpeg", nextQuality);
+    encoded = nextEncoded;
+    quality = nextQuality;
+
+    if (Math.ceil((nextEncoded.length * 3) / 4) <= REPORT_UPLOAD_TARGET_BYTES) {
+      break;
+    }
+  }
+
+  console.info("[hue] Report frame encoded for upload", {
+    sourceWidth,
+    sourceHeight,
+    uploadWidth: width,
+    uploadHeight: height,
+    quality,
+    approximateBytes: Math.ceil((encoded.length * 3) / 4),
+  });
+
+  return encoded;
 }
 
 function captureVideoFrame(video: HTMLVideoElement): string {
@@ -623,13 +680,15 @@ export function HueExperience() {
     setQrOverlay({ status: "loading" });
 
     try {
+      const uploadFrame = await encodeReportFrameForUpload(frame);
+
       const response = await fetch("/api/reports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          image: frame,
+          image: uploadFrame,
           paletteId: analysisResult?.paletteId,
           paletteName: analysisResult?.paletteName,
         }),
@@ -734,10 +793,7 @@ export function HueExperience() {
               </label>
               <div className="consent-actions">
                 <button className="primary-action" type="button" onClick={handleConsentConfirm}>
-                  Confirm
-                </button>
-                <button className="secondary-action" type="button" onClick={handleConsentDecline}>
-                  Decline
+                  Continue
                 </button>
               </div>
             </div>

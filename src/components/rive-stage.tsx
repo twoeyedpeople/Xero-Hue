@@ -67,12 +67,15 @@ function normaliseRiveModule(module: unknown): RiveApi {
   return maybeDefault.default ?? (module as unknown as RiveApi);
 }
 
-function getLayoutScaleFactor(): number {
-  return 1 / Math.max(1, window.devicePixelRatio || 1);
-}
-
 function getRiveSource(): string {
   return process.env.NODE_ENV === "development" ? `/rive/xerocon.riv?v=${Date.now()}` : "/rive/xerocon.riv";
+}
+
+function createContainLayout(api: RiveApi): InstanceType<RiveApi["Layout"]> {
+  return new api.Layout({
+    fit: api.Fit.Contain,
+    alignment: api.Alignment.Center,
+  });
 }
 
 function preserveWebglDrawingBuffer(canvas: HTMLCanvasElement): void {
@@ -344,10 +347,7 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
         dispatchPointerExit: true,
         enableMultiTouch: true,
         stateMachines: RIVE_STATE_MACHINE,
-        layout: new api.Layout({
-          fit: api.Fit.Layout,
-          layoutScaleFactor: getLayoutScaleFactor(),
-        }),
+        layout: createContainLayout(api),
         onLoad: () => {
           if (cancelled) {
             return;
@@ -382,10 +382,7 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
         const rive = riveRef.current;
 
         if (rive && apiRef.current) {
-          rive.layout = new apiRef.current.Layout({
-            fit: apiRef.current.Fit.Layout,
-            layoutScaleFactor: getLayoutScaleFactor(),
-          });
+          rive.layout = createContainLayout(apiRef.current);
         }
 
         safelyResize(rive);

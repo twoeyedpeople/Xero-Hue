@@ -21,6 +21,18 @@ function getOrigin(request: Request): string {
   return new URL(request.url).origin;
 }
 
+function getImageExtension(mimeType: string): string {
+  if (mimeType === "image/jpeg") {
+    return "jpg";
+  }
+
+  if (mimeType === "image/webp") {
+    return "webp";
+  }
+
+  return "png";
+}
+
 export async function POST(request: Request) {
   let payload: ReportRequest;
 
@@ -36,7 +48,7 @@ export async function POST(request: Request) {
 
   const id = randomUUID();
   const { buffer, mimeType } = dataUrlToBuffer(payload.image);
-  const pathname = `reports/${id}.png`;
+  const pathname = `reports/${id}.${getImageExtension(mimeType)}`;
   let blobUrl: string | undefined;
   let blobDownloadUrl: string | undefined;
   let storage: "blob" | "memory" = "memory";
