@@ -1,3 +1,5 @@
+import { DownloadShareButton } from "./download-share-button";
+
 type DownloadPageProps = {
   params: Promise<{
     id: string;
@@ -18,9 +20,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={imageUrl} alt="Your generated Hue report" />
         </div>
-        <a className="primary-action" href={downloadUrl} download>
-          Download image
-        </a>
+        <DownloadShareButton downloadUrl={downloadUrl} imageUrl={imageUrl} />
       </section>
     </main>
   );
