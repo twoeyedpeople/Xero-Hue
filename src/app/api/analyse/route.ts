@@ -63,7 +63,7 @@ const CELEBRITY_ARCHETYPES: CelebrityArchetype[] = [
 
 const MAX_EVIDENCE_LENGTH = 32;
 const OPENAI_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL ?? "gpt-image-2";
-const OPENAI_IMAGE_SIZE = process.env.OPENAI_IMAGE_SIZE ?? "1536x2048";
+const OPENAI_IMAGE_SIZE = process.env.OPENAI_IMAGE_SIZE ?? "1024x1024";
 const OPENAI_IMAGE_QUALITY = process.env.OPENAI_IMAGE_QUALITY ?? "high";
 const ENV_ANALYSIS_ONLY = process.env.HUE_ANALYSIS_ONLY === "true";
 
@@ -162,51 +162,24 @@ Return JSON only.`;
 function buildImagePrompt(paletteId: PaletteId, stylePresentation: StylePresentation): string {
   const palette = getPalette(paletteId);
   const paletteLine = clothingPaletteInstruction(palette);
+  const stylingInstruction =
+    stylePresentation === "feminine"
+      ? "Style the visible neckline/collar area in elevated smart-casual womenswear with a refined, fashion-forward edge: fine knits, silk camisoles, crisp relaxed shirts, premium tees, or light jacket collars. Keep the visible styling modern, chic, and polished."
+      : stylePresentation === "masculine"
+        ? "Style the visible neckline/collar area in elevated smart-casual menswear with a refined, fashion-forward edge: fine knit polos, crisp open-collar shirts, premium tees, or light jacket collars. Keep the visible styling modern, minimal, and polished."
+        : "Style the visible neckline/collar area in elevated smart-casual clothing with a refined, fashion-forward edge: fine knits, crisp relaxed shirts, premium tees, or light jacket collars. Keep the visible styling modern, chic, and polished.";
 
- if (stylePresentation === "feminine") {
-    return `Use the uploaded selfie only as the facial identity reference but recreate the face. Create a realistic single close-up portrait of the same person, strictly framed as a medium waist-up shot, cropped cleanly just above the beltline/waist, centered on a pure white background.
+  return `Use the uploaded selfie only as the facial identity reference but recreate the face. Create a realistic single close-up portrait of the same person, designed for a square 2048 x 2048 image, centered on a pure white background.
 
-Important: build the upper body with realistic adult female proportions before applying clothing. Build the figure with natural adult female anatomy and proportions, including a balanced feminine silhouette, realistic shoulders, and believable upper torso shape without exaggeration. Keep the head, neck, shoulders, and chest area in natural scale. Avoid the look of a large selfie head placed on a smaller body.
+Framing requirement: tight head-and-shoulders portrait framed just above the shoulders. The composition should show the head, hair, face, neck, and only the top edge of the shoulders or collar area. Do not show the chest, torso, arms, hands, waist, beltline, or lower body.
 
-Use a consistent fashion editorial camera setup: strict medium waist-up close-up shot, camera positioned at chest-height, camera level, 85-90mm portrait lens compression to eliminate wide-angle distortion. Framing must tightly capture only from the waist up. Do not use selfie perspective. Do not enlarge the face to preserve identity.
+Use a consistent fashion editorial camera setup: square 1:1 composition, camera at eye height, camera level, 85-90mm portrait lens compression to eliminate wide-angle distortion. The face must remain natural scale, not enlarged or distorted to preserve identity.
 
-The subject is posed in a natural fashion editorial stance with subtle asymmetry: weight shifted onto one hip, torso gently angled (10–20 degrees) rather than facing directly forward. The pose must ALWAYS include the right hand placed naturally on the right hip as a consistent anchor pose. The left arm should remain relaxed, softly bent, or naturally hanging. The posture should feel effortless, confident, and editorial rather than stiff or symmetrical.
+Composition requirement: keep the subject centered in the square frame, with the face, neck, and visible shoulder/collar area aligned to the central vertical axis. Preserve equal visual breathing room on the left and right sides. Do not shift the subject toward either edge.
 
-Pose variation is required but must preserve the right-hand-on-hip anchor. The subject must not appear rigid, centered, or symmetrically locked. Encourage natural editorial posing such as a slight lean, soft shoulder drop, or torso rotation while maintaining the right hand on hip.
+Expression and pose should feel natural, calm, confident, and editorial, with subtle head angle allowed. Avoid rigid passport styling while keeping the subject clearly centered.
 
-Composition requirement: ensure balanced framing with extra visual space preserved on the left side of the subject so the left arm and shoulder are never cropped or cut off. The subject must not be shifted too far left in frame.
-
-Arms should be naturally posed with visible, relaxed hands. No hidden or forced positioning.
-
-Dress her in elevated smart-casual womenswear with a refined, fashion-forward edge: unstructured blazers or light jackets, fine knits, silk camisoles, crisp relaxed shirts and premium tees. Keep silhouettes modern, chic and effortlessly put together with light layering and balanced proportions.
-
-[${paletteLine}]
-
-Optional minimal sunglasses. Soft directional studio lighting, high-resolution detail, editorial lookbook style.
-
-The background must be a completely pure solid white seamless studio background (#FFFFFF only), with no grey tones, no gradient, no texture, and no environmental detail. The subject should appear fully isolated on white. There must be absolutely no visible shadows of any kind, including no cast shadow, no wall shadow, and no background gradient.
-
-Framing must strictly be a close-up waist-up crop, hiding the lower body completely. The subject must be fully visible within frame with no cropping of arms or shoulders, especially no cropping on the left side. No logos, no text, no formalwear, no extreme streetwear, no sloppy casualwear, no eveningwear.
-
-Negative instruction: no rigid front-facing passport pose, no symmetrical stiff posture, no centered static stance, no arms glued to sides, no left-side cropping, no cropped shoulders or arms, no hands in pockets visible, no pants pockets visible, no oversized head, no shrunken torso, no childlike proportions, no bobblehead effect, no tiny shoulders, no warped hands, no selfie lens distortion, no off-white background, no grey background, no gradient background, and no shadows.`;
-  }
-
-  if (stylePresentation === "masculine") {
-    return `Use the uploaded selfie only as the facial identity reference but recreate the face. Create a realistic single close-up portrait of the same person, strictly framed as a medium waist-up shot, cropped cleanly just above the beltline/waist, centered on a pure white background.
-
-Important: build the upper body with realistic adult male proportions before applying clothing. Keep the head, neck, shoulders, and chest area in natural scale. Shoulders should be naturally wider than the head. Avoid the look of a large selfie head placed on a smaller body.
-
-Use a consistent fashion editorial camera setup: strict medium waist-up close-up shot, camera positioned at chest-height, camera level, 85-90mm portrait lens compression to eliminate wide-angle distortion. Framing must tightly capture only from the waist up. Do not use selfie perspective. Do not enlarge the face to preserve identity.
-
-The subject is posed in a natural fashion editorial stance with subtle asymmetry: weight shifted slightly to one side, torso gently angled (10–20 degrees) rather than facing directly forward. The pose must ALWAYS include the right hand placed naturally on the right hip as a consistent anchor pose. The left arm should remain relaxed, slightly bent, or resting naturally at the side. The posture should feel effortless, composed, and editorial rather than rigid.
-
-Pose variation is required but must preserve the right-hand-on-hip anchor. The subject must not appear stiff, centered, or symmetrically locked.
-
-Composition requirement: ensure balanced framing with extra visual space preserved on the left side of the subject so the left arm and shoulder are never cropped or cut off. The subject must not be shifted too far left in frame.
-
-Arms should be naturally posed with visible, relaxed hands. No hidden positioning.
-
-Dress him in elevated smart-casual menswear with a refined, fashion-forward edge: unstructured tailored jackets, fine knit polos, crisp open-collar shirts and premium tees. Keep silhouettes modern, minimal and effortlessly cool with light layering and sharp-but-relaxed proportions.
+${stylingInstruction}
 
 [${paletteLine}]
 
@@ -214,36 +187,9 @@ Optional minimal sunglasses. Soft directional studio lighting, high-resolution d
 
 The background must be a completely pure solid white seamless studio background (#FFFFFF only), with no grey tones, no gradient, no texture, and no environmental detail. The subject should appear fully isolated on white. There must be absolutely no visible shadows of any kind, including no cast shadow, no wall shadow, and no background gradient.
 
-Framing must strictly be a close-up waist-up crop, hiding the lower body completely. The subject must be fully visible within frame with no cropping of arms or shoulders, especially no cropping on the left side. No logos, no text, no formal suits, no extreme streetwear, no sloppy casualwear.
+Framing must strictly be a square close-up head-and-shoulders crop, hiding the torso and lower body completely. The subject must be fully visible and centered within frame with no cropping of the head, hair, face, neck, or visible shoulder/collar edge. No logos, no text, no formalwear, no extreme streetwear, no sloppy casualwear, no eveningwear.
 
-Negative instruction: no rigid front-facing passport pose, no symmetrical stiff posture, no centered static stance, no arms glued to sides, no left-side cropping, no cropped shoulders or arms, no hands in pockets visible, no pants pockets visible, no oversized head, no shrunken torso, no childlike proportions, no bobblehead effect, no tiny shoulders, no warped hands, no selfie lens distortion, no off-white background, no grey background, no gradient background, and no shadows.`;
-  }
-
-  return `Use the uploaded selfie only as the facial identity reference but recreate the face. Create a realistic single close-up portrait of the same person, strictly framed as a medium waist-up shot, cropped cleanly just above the beltline/waist, centered on a pure white background.
-
-Important: build the upper body with realistic adult proportions before applying clothing. Keep the head, neck, shoulders, and chest area in natural scale. Avoid the look of a large selfie head placed on a smaller body.
-
-Use a consistent fashion editorial camera setup: strict medium waist-up close-up shot, camera positioned at chest-height, camera level, 85-90mm portrait lens compression to eliminate wide-angle distortion. Framing must tightly capture only from the waist up. Do not use selfie perspective. Do not enlarge the face to preserve identity.
-
-The subject is posed in a natural fashion editorial stance with subtle asymmetry: weight shifted slightly to one side, torso gently angled (10–20 degrees) rather than facing directly forward. The pose must ALWAYS include the right hand placed naturally on the right hip as a consistent anchor pose. The left arm should remain relaxed, slightly bent, or naturally resting at the side. The posture should feel effortless and editorial rather than rigid or symmetrical.
-
-Pose variation is required but must preserve the right-hand-on-hip anchor.
-
-Composition requirement: ensure balanced framing with extra visual space preserved on the left side of the subject so the left arm and shoulder are never cropped or cut off.
-
-Arms should be naturally posed with visible, relaxed hands.
-
-Dress the subject in elevated smart-casual styling with a refined, fashion-forward edge: unstructured blazers or light jackets, fine knits, crisp relaxed shirts, premium tees, and minimal layered accents. Keep silhouettes modern, chic, refined and effortlessly put together with balanced proportions.
-
-[${paletteLine}]
-
-Optional minimal sunglasses. Soft directional studio lighting, high-resolution detail, editorial lookbook style.
-
-The background must be a completely pure solid white seamless studio background (#FFFFFF only), with no grey tones, no gradient, no texture, and no environmental detail. The subject should appear fully isolated on white. There must be absolutely no visible shadows of any kind, including no cast shadow, no wall shadow, and no background gradient.
-
-Framing must strictly be a close-up waist-up crop, hiding the lower body completely. The subject must be fully visible within frame with no cropping of arms or shoulders, especially no cropping on the left side. No logos, no text, no formalwear, no extreme streetwear, no sloppy casualwear, no eveningwear.
-
-Negative instruction: no rigid front-facing passport pose, no symmetrical stiff posture, no centered static stance, no arms glued to sides, no left-side cropping, no cropped shoulders or arms, no hands in pockets visible, no pants pockets visible, no oversized head, no shrunken torso, no childlike proportions, no bobblehead effect, no tiny shoulders, no warped hands, no selfie lens distortion, no off-white background, no grey background, no gradient background, and no shadows.`;
+Negative instruction: no waist-up framing, no full torso, no visible arms, no visible hands, no off-center subject, no subject shifted left or right, no rigid front-facing passport pose, no cropped head or hair, no side cropping, no oversized head, no shrunken neck, no childlike proportions, no bobblehead effect, no warped face, no selfie lens distortion, no off-white background, no grey background, no gradient background, and no shadows.`;
 }
 
 function parseGeminiJson(text: string | undefined): GeminiPaletteResponse {
@@ -412,8 +358,8 @@ export async function POST(request: NextRequest) {
       model: OPENAI_IMAGE_MODEL,
       size: OPENAI_IMAGE_SIZE,
       quality: OPENAI_IMAGE_QUALITY,
-      requestedAspectRatio: "3:4",
-      riveTargetWidth: 1536,
+      requestedAspectRatio: "1:1",
+      riveTargetWidth: 2048,
       riveTargetHeight: 2048,
     },
   });

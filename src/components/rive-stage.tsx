@@ -20,6 +20,7 @@ const RIVE_VIEW_MODEL = "MainView";
 const RIVE_VIEW_MODEL_INSTANCE = "Instance";
 const REVEAL_DELAY_MS = 500;
 const preservedCanvasContexts = new WeakSet<HTMLCanvasElement>();
+const retainedCleanedViewModels: ViewModelInstance[] = [];
 
 export type RiveEvidence = {
   skin: string;
@@ -141,6 +142,38 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
 
   const getVmi = useCallback(() => vmiRef.current, []);
 
+  const disposeBoundViewModel = useCallback(() => {
+    const vmi = vmiRef.current;
+
+    if (!vmi) {
+      return;
+    }
+
+    try {
+      vmi.selfUnref = true;
+      vmi.cleanup();
+      retainedCleanedViewModels.push(vmi);
+    } catch {
+      // Rive cleanup can race with fast refresh or a reset while the runtime is tearing down.
+    } finally {
+      vmiRef.current = null;
+    }
+  }, []);
+
+  const cleanupRiveInstance = useCallback(() => {
+    cleanupListenersRef.current?.();
+    cleanupListenersRef.current = null;
+    disposeBoundViewModel();
+
+    try {
+      riveRef.current?.cleanup();
+    } catch {
+      // WebGL resources may already be partially released during dev reloads.
+    } finally {
+      riveRef.current = null;
+    }
+  }, [disposeBoundViewModel]);
+
   const safelyResize = useCallback((rive: RiveInstance | null) => {
     if (!rive || !canvasRef.current?.isConnected) {
       return;
@@ -241,6 +274,7 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
   const attachViewModel = useCallback(
     (rive: RiveInstance) => {
       cleanupListenersRef.current?.();
+      cleanupListenersRef.current = null;
 
       let vmi: ViewModelInstance | null = null;
       const configuredViewModel = rive.viewModelByName(RIVE_VIEW_MODEL);
@@ -321,12 +355,12 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
 
       apiRef.current = api;
       cleanupListenersRef.current?.();
+      cleanupListenersRef.current = null;
       if (listenerRefreshFrameRef.current) {
         window.cancelAnimationFrame(listenerRefreshFrameRef.current);
         listenerRefreshFrameRef.current = null;
       }
-      riveRef.current?.cleanup();
-      vmiRef.current = null;
+      cleanupRiveInstance();
       setIsLoaded(false);
       setIsVisible(false);
       callbacksRef.current.onVisibleChange?.(false);
@@ -401,13 +435,10 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
         window.cancelAnimationFrame(listenerRefreshFrameRef.current);
         listenerRefreshFrameRef.current = null;
       }
-      cleanupListenersRef.current?.();
-      riveRef.current?.cleanup();
-      riveRef.current = null;
-      vmiRef.current = null;
+      cleanupRiveInstance();
       callbacksRef.current.onVisibleChange?.(false);
     };
-  }, [attachViewModel, queueRiveListenerRefresh, safelyResize]);
+  }, [attachViewModel, cleanupRiveInstance, queueRiveListenerRefresh, safelyResize]);
 
   useImperativeHandle(
     ref,
