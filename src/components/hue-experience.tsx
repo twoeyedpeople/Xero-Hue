@@ -15,9 +15,13 @@ type ReportUploadResponse = {
 
 type QrOverlayState = {
   status: "loading" | "ready";
+  title?: string;
+  copy?: string;
+  closeLabel?: string;
   qrDataUrl?: string;
   downloadPageUrl?: string;
   imageUrl?: string;
+  targetUrl?: string;
   storage?: "blob" | "memory";
 };
 
@@ -36,6 +40,27 @@ const REPORT_UPLOAD_TARGET_BYTES = 3_400_000;
 const ANALYSIS_RETRY_DELAY_MS = 900;
 const PHOTO_CAPTURE_DELAY_MS = 3000;
 const PROGRESS_TWEEN_MS = 650;
+const QR_CODE_OPTIONS = {
+  width: 380,
+  margin: 1,
+  color: {
+    dark: "#062F48",
+    light: "#FFFFFF",
+  },
+  errorCorrectionLevel: "M" as const,
+};
+const LEGAL_QR_LINKS = {
+  privacy: {
+    title: "PRIVACY POLICY",
+    url: "https://www.xero.com/legal/privacy/",
+    copy: "Scan the QR code to view Xero's Privacy Policy.",
+  },
+  terms: {
+    title: "TERMS & CONDITIONS",
+    url: "https://www.xero.com/legal/terms/",
+    copy: "Scan the QR code to view Xero's Terms & Conditions.",
+  },
+} as const;
 const ANALYSIS_PROGRESS_STEPS = [
   { progress: 0, label: "INITIALIZING CHROMATIC SCANNER..." },
   { progress: 10, label: "ANALYSING FACIAL TONES..." },
@@ -663,6 +688,32 @@ export function HueExperience() {
     resetExperience();
   }, [resetExperience]);
 
+  const handleShowLegalQr = useCallback(async (legalLink: (typeof LEGAL_QR_LINKS)[keyof typeof LEGAL_QR_LINKS]) => {
+    setError(null);
+    setQrOverlay({
+      status: "loading",
+      title: legalLink.title,
+      copy: legalLink.copy,
+      closeLabel: "Back",
+    });
+
+    try {
+      const qrDataUrl = await QRCode.toDataURL(legalLink.url, QR_CODE_OPTIONS);
+
+      setQrOverlay({
+        status: "ready",
+        title: legalLink.title,
+        copy: legalLink.copy,
+        closeLabel: "Back",
+        qrDataUrl,
+        targetUrl: legalLink.url,
+      });
+    } catch (legalQrError) {
+      setQrOverlay(null);
+      setError(legalQrError instanceof Error ? legalQrError.message : "Could not create the QR code.");
+    }
+  }, []);
+
   const handleSaveReport = useCallback(async () => {
     if (!analysisComplete || isSaving) {
       return;
@@ -677,7 +728,12 @@ export function HueExperience() {
 
     setIsSaving(true);
     setError(null);
-    setQrOverlay({ status: "loading" });
+    setQrOverlay({
+      status: "loading",
+      title: "KEEP IT FOREVER",
+      copy: "Preparing your report for download.",
+      closeLabel: "Back to report",
+    });
 
     try {
       const uploadFrame = await encodeReportFrameForUpload(frame);
@@ -700,21 +756,17 @@ export function HueExperience() {
       }
 
       const report = (await response.json()) as ReportUploadResponse;
-      const qrDataUrl = await QRCode.toDataURL(report.downloadPageUrl, {
-        width: 380,
-        margin: 1,
-        color: {
-          dark: "#062F48",
-          light: "#FFFFFF",
-        },
-        errorCorrectionLevel: "M",
-      });
+      const qrDataUrl = await QRCode.toDataURL(report.downloadPageUrl, QR_CODE_OPTIONS);
 
       setQrOverlay({
         status: "ready",
+        title: "KEEP IT FOREVER",
+        copy: "Scan the QR code and save the image straight to your phone.",
+        closeLabel: "Back to report",
         qrDataUrl,
         downloadPageUrl: report.downloadPageUrl,
         imageUrl: report.imageUrl,
+        targetUrl: report.imageUrl,
         storage: report.storage,
       });
     } catch (saveError) {
@@ -806,27 +858,29 @@ export function HueExperience() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className="qr-logo" src="/images/Logo-Xero.svg" alt="Xero" />
               <p id="qr-title" className="qr-kicker">
-                KEEP IT FOREVER
+                {qrOverlay.title}
               </p>
               {qrOverlay.status === "loading" ? (
                 <div className="qr-loading" aria-label="Preparing QR code" />
               ) : (
-                <a className="qr-link" href={qrOverlay.imageUrl} target="_blank" rel="noreferrer" aria-label="Open report image">
+                <a
+                  className="qr-link"
+                  href={qrOverlay.targetUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open ${qrOverlay.title?.toLowerCase()}`}
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="qr-image" src={qrOverlay.qrDataUrl} alt="QR code to download your Hue report" />
+                  <img className="qr-image" src={qrOverlay.qrDataUrl} alt={`QR code for ${qrOverlay.title?.toLowerCase()}`} />
                 </a>
               )}
-              <p className="qr-copy">
-                {qrOverlay.status === "loading"
-                  ? "Preparing your report for download."
-                  : "Scan the QR code and save the image straight to your phone."}
-              </p>
+              <p className="qr-copy">{qrOverlay.copy}</p>
               {qrOverlay.status === "ready" && qrOverlay.storage === "memory" ? (
                 <p className="qr-warning">Local preview mode: cross-device download needs Vercel Blob configured.</p>
               ) : null}
               <div className="qr-actions">
                 <button className="primary-action compact" type="button" onClick={() => setQrOverlay(null)}>
-                  Back to report
+                  {qrOverlay.closeLabel}
                 </button>
               </div>
             </div>
@@ -844,13 +898,13 @@ export function HueExperience() {
         {!analysisComplete ? (
           <p className="footer-legal">
             For more information, please visit Xero&apos;s{" "}
-            <a href="https://www.xero.com/sg/legal/privacy/" target="_blank" rel="noreferrer">
+            <button className="footer-legal-link" type="button" onClick={() => void handleShowLegalQr(LEGAL_QR_LINKS.privacy)}>
               Privacy Policy
-            </a>{" "}
+            </button>{" "}
             and{" "}
-            <a href="https://www.xero.com/sg/legal/terms/" target="_blank" rel="noreferrer">
+            <button className="footer-legal-link" type="button" onClick={() => void handleShowLegalQr(LEGAL_QR_LINKS.terms)}>
               Terms &amp; Conditions
-            </a>
+            </button>
             .
           </p>
         ) : null}
