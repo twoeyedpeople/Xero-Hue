@@ -70,7 +70,7 @@ const LEGAL_QR_LINKS = {
         url: "https://www.xero.com/legal/terms/",
       },
       {
-        title: "Xerocon T&C's",
+        title: "Xerocon London T&C's",
         url: "https://brandfolder.xero.com/NE531UQB/at/r8b4ks93sjbstp46spnvncvr/Xerocon_London_2026___Delegate_Terms_and_Conditions.pdf",
       },
     ],
