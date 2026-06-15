@@ -18,10 +18,11 @@ type QrOverlayState = {
   title?: string;
   copy?: string;
   closeLabel?: string;
-  qrDataUrl?: string;
-  downloadPageUrl?: string;
-  imageUrl?: string;
-  targetUrl?: string;
+  qrItems?: Array<{
+    title?: string;
+    qrDataUrl: string;
+    targetUrl: string;
+  }>;
   storage?: "blob" | "memory";
 };
 
@@ -52,13 +53,27 @@ const QR_CODE_OPTIONS = {
 const LEGAL_QR_LINKS = {
   privacy: {
     title: "PRIVACY POLICY",
-    url: "https://www.xero.com/legal/privacy/",
     copy: "Scan the QR code to view Xero's Privacy Policy.",
+    qrLinks: [
+      {
+        title: undefined,
+        url: "https://www.xero.com/legal/privacy/",
+      },
+    ],
   },
   terms: {
     title: "TERMS & CONDITIONS",
-    url: "https://www.xero.com/legal/terms/",
-    copy: "Scan the QR code to view Xero's Terms & Conditions.",
+    copy: "Scan the QR codes to view Xero and Xerocon terms.",
+    qrLinks: [
+      {
+        title: "Xero T&C's",
+        url: "https://www.xero.com/legal/terms/",
+      },
+      {
+        title: "Xerocon T&C's",
+        url: "https://brandfolder.xero.com/NE531UQB/at/r8b4ks93sjbstp46spnvncvr/Xerocon_London_2026___Delegate_Terms_and_Conditions.pdf",
+      },
+    ],
   },
 } as const;
 const ANALYSIS_PROGRESS_STEPS = [
@@ -698,15 +713,20 @@ export function HueExperience() {
     });
 
     try {
-      const qrDataUrl = await QRCode.toDataURL(legalLink.url, QR_CODE_OPTIONS);
+      const qrItems = await Promise.all(
+        legalLink.qrLinks.map(async (qrLink) => ({
+          title: qrLink.title,
+          qrDataUrl: await QRCode.toDataURL(qrLink.url, QR_CODE_OPTIONS),
+          targetUrl: qrLink.url,
+        })),
+      );
 
       setQrOverlay({
         status: "ready",
         title: legalLink.title,
         copy: legalLink.copy,
         closeLabel: "Back",
-        qrDataUrl,
-        targetUrl: legalLink.url,
+        qrItems,
       });
     } catch (legalQrError) {
       setQrOverlay(null);
@@ -763,10 +783,12 @@ export function HueExperience() {
         title: "KEEP IT FOREVER",
         copy: "Scan the QR code and save the image straight to your phone.",
         closeLabel: "Back to report",
-        qrDataUrl,
-        downloadPageUrl: report.downloadPageUrl,
-        imageUrl: report.imageUrl,
-        targetUrl: report.imageUrl,
+        qrItems: [
+          {
+            qrDataUrl,
+            targetUrl: report.imageUrl,
+          },
+        ],
         storage: report.storage,
       });
     } catch (saveError) {
@@ -863,16 +885,23 @@ export function HueExperience() {
               {qrOverlay.status === "loading" ? (
                 <div className="qr-loading" aria-label="Preparing QR code" />
               ) : (
-                <a
-                  className="qr-link"
-                  href={qrOverlay.targetUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open ${qrOverlay.title?.toLowerCase()}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="qr-image" src={qrOverlay.qrDataUrl} alt={`QR code for ${qrOverlay.title?.toLowerCase()}`} />
-                </a>
+                <div className="qr-grid" data-count={qrOverlay.qrItems?.length ?? 0}>
+                  {qrOverlay.qrItems?.map((qrItem) => (
+                    <div className="qr-item" key={qrItem.targetUrl}>
+                      {qrItem.title ? <p className="qr-item-title">{qrItem.title}</p> : null}
+                      <a
+                        className="qr-link"
+                        href={qrItem.targetUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`Open ${qrItem.title ?? qrOverlay.title}`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img className="qr-image" src={qrItem.qrDataUrl} alt={`QR code for ${qrItem.title ?? qrOverlay.title}`} />
+                      </a>
+                    </div>
+                  ))}
+                </div>
               )}
               <p className="qr-copy">{qrOverlay.copy}</p>
               {qrOverlay.status === "ready" && qrOverlay.storage === "memory" ? (
