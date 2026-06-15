@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 type DownloadShareButtonProps = {
   downloadUrl: string;
@@ -32,6 +33,7 @@ export function DownloadShareButton({ downloadUrl, imageUrl }: DownloadShareButt
     }
 
     if (!navigator.share) {
+      trackEvent("image_download", { method: "browser_download" });
       downloadImage(downloadUrl);
       return;
     }
@@ -55,6 +57,7 @@ export function DownloadShareButton({ downloadUrl, imageUrl }: DownloadShareButt
           files: [file],
           title: "Xero Hue report",
         });
+        trackEvent("image_download", { method: "native_share_file" });
         return;
       }
 
@@ -62,11 +65,13 @@ export function DownloadShareButton({ downloadUrl, imageUrl }: DownloadShareButt
         title: "Xero Hue report",
         url: new URL(imageUrl, window.location.href).href,
       });
+      trackEvent("image_download", { method: "native_share_url" });
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
 
+      trackEvent("image_download", { method: "browser_download_fallback" });
       downloadImage(downloadUrl);
     } finally {
       setIsSharing(false);

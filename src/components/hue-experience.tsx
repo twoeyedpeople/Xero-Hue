@@ -4,6 +4,7 @@ import QRCode from "qrcode";
 import { Download, RotateCcw, ShieldCheck, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnalysisResult } from "@/lib/analysis-types";
+import { trackEvent } from "@/lib/analytics";
 import { RiveStage, type RiveStageHandle } from "@/components/rive-stage";
 
 type ReportUploadResponse = {
@@ -22,6 +23,8 @@ type QrOverlayState = {
     title?: string;
     qrDataUrl: string;
     targetUrl: string;
+    clickEventName?: string;
+    clickEventParams?: Record<string, string | number | boolean | undefined>;
   }>;
   storage?: "blob" | "memory";
 };
@@ -54,6 +57,7 @@ const LEGAL_QR_LINKS = {
   privacy: {
     title: "PRIVACY POLICY",
     copy: "Scan the QR code to view Xero's Privacy Policy.",
+    eventName: "privacy_policy_view",
     qrLinks: [
       {
         title: undefined,
@@ -64,6 +68,7 @@ const LEGAL_QR_LINKS = {
   terms: {
     title: "TERMS & CONDITIONS",
     copy: "Scan the QR codes to view Xero and Xerocon terms.",
+    eventName: "terms_conditions_view",
     qrLinks: [
       {
         title: "Xero T&C's",
@@ -450,6 +455,7 @@ export function HueExperience() {
     }
 
     acceptedConsentRef.current = true;
+    trackEvent("permission_accept");
     closeConsent(() => {
       setHasAcceptedConsent(true);
       stageRef.current?.setAcceptedPermissions(true);
@@ -676,6 +682,7 @@ export function HueExperience() {
 
       try {
         const image = captureVideoFrame(videoRef.current);
+        trackEvent("image_taken");
         void analyseImage(image);
       } catch (captureError) {
         setError(captureError instanceof Error ? captureError.message : "Could not capture the camera frame.");
@@ -695,16 +702,19 @@ export function HueExperience() {
 
     consentOpenTimerRef.current = window.setTimeout(() => {
       consentOpenTimerRef.current = null;
+      trackEvent("experience_start");
       openConsent();
     }, CONSENT_OPEN_DELAY_MS);
   }, [openConsent]);
 
   const handleReset = useCallback(() => {
+    trackEvent("experience_restart");
     resetExperience();
   }, [resetExperience]);
 
   const handleShowLegalQr = useCallback(async (legalLink: (typeof LEGAL_QR_LINKS)[keyof typeof LEGAL_QR_LINKS]) => {
     setError(null);
+    trackEvent(legalLink.eventName);
     setQrOverlay({
       status: "loading",
       title: legalLink.title,
@@ -787,6 +797,8 @@ export function HueExperience() {
           {
             qrDataUrl,
             targetUrl: report.imageUrl,
+            clickEventName: "image_download",
+            clickEventParams: { method: "qr_link" },
           },
         ],
         storage: report.storage,
@@ -894,6 +906,11 @@ export function HueExperience() {
                         href={qrItem.targetUrl}
                         target="_blank"
                         rel="noreferrer"
+                        onClick={() => {
+                          if (qrItem.clickEventName) {
+                            trackEvent(qrItem.clickEventName, qrItem.clickEventParams);
+                          }
+                        }}
                         aria-label={`Open ${qrItem.title ?? qrOverlay.title}`}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
