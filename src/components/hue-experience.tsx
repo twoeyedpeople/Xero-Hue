@@ -871,9 +871,20 @@ export function HueExperience() {
                 <span>
                   <strong>I understand and agree to the processing of my image</strong>
                   <small>
-                    Xero will collect and use your photo solely for the purpose of providing your color palette. For more
-                    information on how Xero processes your personal data, please see our Privacy Notice. By clicking continue
-                    below, you acknowledge and agree to these terms.
+                    Xero will collect and use your photo solely for the purpose of providing your colour palette. For more
+                    information on how Xero processes your personal data, please see our{" "}
+                    <button
+                      className="consent-privacy-link"
+                      type="button"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        void handleShowLegalQr(LEGAL_QR_LINKS.privacy);
+                      }}
+                    >
+                      Privacy Notice
+                    </button>
+                    . By clicking continue below, you acknowledge and agree to these terms.
                   </small>
                 </span>
               </label>
