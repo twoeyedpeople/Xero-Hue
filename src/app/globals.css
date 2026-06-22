@@ -599,6 +599,7 @@ a {
 .footer-legal-link {
   appearance: none;
   border: 0;
+  border-bottom: 1px solid currentColor;
   padding: 0;
   background: none;
   cursor: pointer;
