@@ -319,7 +319,8 @@ a {
   cursor: pointer;
   font: inherit;
   font-weight: 800;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .consent-privacy-link:hover {
