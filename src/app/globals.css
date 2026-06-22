@@ -592,7 +592,8 @@ a {
 .footer-legal-link {
   color: inherit;
   font-weight: 800;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .footer-legal-link {
@@ -607,7 +608,7 @@ a {
 .footer-legal a:hover,
 .footer-legal-link:hover {
   color: var(--ink-2);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .download-page {
