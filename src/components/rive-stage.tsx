@@ -481,7 +481,7 @@ export const RiveStage = forwardRef<RiveStageHandle, RiveStageProps>(function Ri
 
   return (
     <div className={className} data-rive-loaded={isLoaded} data-rive-visible={isVisible}>
-      <canvas ref={canvasRef} aria-label="Xero Hue interactive colour analysis experience" />
+      <canvas ref={canvasRef} aria-label="Xero Hue interactive color analysis experience" />
       {!isVisible ? <div className="rive-loading">Loading experience</div> : null}
     </div>
   );

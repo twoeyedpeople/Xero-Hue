@@ -75,7 +75,7 @@ const LEGAL_QR_LINKS = {
         url: "https://www.xero.com/legal/terms/",
       },
       {
-        title: "Xerocon London T&C's",
+        title: "Xerocon Denver T&C's",
         url: "https://brandfolder.xero.com/NE531UQB/at/8msgfhh6k7k4wr6373s53s6/Xerocon_Denver_2026_-_Event_Terms_and_Conditions.pdf",
       },
     ],
@@ -83,16 +83,16 @@ const LEGAL_QR_LINKS = {
 } as const;
 const ANALYSIS_PROGRESS_STEPS = [
   { progress: 0, label: "INITIALIZING CHROMATIC SCANNER..." },
-  { progress: 10, label: "ANALYSING FACIAL TONES..." },
-  { progress: 20, label: "MAPPING COLOUR PROFILE..." },
+  { progress: 10, label: "ANALYZING FACIAL TONES..." },
+  { progress: 20, label: "MAPPING COLOR PROFILE..." },
   { progress: 30, label: "SCANNING NATURAL CONTRAST..." },
   { progress: 40, label: "DETECTING UNDERTONES..." },
   { progress: 50, label: "CALIBRATING HUE RANGE..." },
-  { progress: 60, label: "PROCESSING COLOUR MATCH..." },
+  { progress: 60, label: "PROCESSING COLOR MATCH..." },
   { progress: 70, label: "BUILDING PERSONAL PALETTE..." },
   { progress: 80, label: "REFINING SHADE SELECTION..." },
-  { progress: 90, label: "GENERATING COLOUR REPORT..." },
-  { progress: 100, label: "GENERATING COLOUR REPORT..." },
+  { progress: 90, label: "GENERATING COLOR REPORT..." },
+  { progress: 100, label: "GENERATING COLOR REPORT..." },
 ] as const;
 
 class AnalysisRequestError extends Error {
@@ -592,7 +592,7 @@ export function HueExperience() {
           console.info("[hue] AI capacity error, retrying analysis once.", {
             message: firstAttemptError instanceof Error ? firstAttemptError.message : String(firstAttemptError),
           });
-          setAnalysisProgress(55, "PROCESSING COLOUR MATCH...");
+          setAnalysisProgress(55, "PROCESSING COLOR MATCH...");
           await sleep(ANALYSIS_RETRY_DELAY_MS);
           result = await requestAnalysis();
         }
@@ -815,7 +815,7 @@ export function HueExperience() {
 
   return (
     <main className="experience-shell">
-      <section className="experience-frame" aria-label="Xero Hue colour analysis booth">
+      <section className="experience-frame" aria-label="Xero Hue color analysis booth">
         <video
           ref={videoRef}
           className="camera-feed"
@@ -871,7 +871,7 @@ export function HueExperience() {
                 <span>
                   <strong>I understand and agree to the processing of my image</strong>
                   <small>
-                    Xero will collect and use your photo solely for the purpose of providing your colour palette. For more
+                    Xero will collect and use your photo solely for the purpose of providing your color palette. For more
                     information on how Xero processes your personal data, please see our{" "}
                     <button
                       className="consent-privacy-link"
